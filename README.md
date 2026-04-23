@@ -400,6 +400,8 @@
     const resetFormBtn = document.getElementById('resetFormBtn');
     const tableBody = document.getElementById('tableBody');
     const totalItemCountSpan = document.getElementById('totalItemCount');
+    const printBtn = document.getElementById('printTableBtn');
+    const downloadCsvBtn = document.getElementById('downloadCsvBtn');
 
     // Helper: set default tanggal hari ini (YYYY-MM-DD)
     function setDefaultDate() {
@@ -611,6 +613,111 @@
             if (toastEl) toastEl.style.opacity = '0';
         }, 2000);
     }
+    // ==================== PRINT FUNCTION ====================
+    function printTable() {
+        if (incomingItems.length === 0) {
+            alert("Tidak ada data untuk dicetak. Silakan tambahkan barang terlebih dahulu.");
+            return;
+        }
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            alert("Harap izinkan pop-up untuk mencetak.");
+            return;
+        }
+
+        const todayDate = new Date().toLocaleDateString('id-ID');
+        let rowsHtml = '';
+        incomingItems.forEach((item, idx) => {
+            rowsHtml += `
+                <tr>
+                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.namaBarang)}</td>
+                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.kategori)}</td>
+                    <td style="border:1px solid #ccc; padding:8px; text-align:right;">${item.jumlah}</td>
+                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.unit)}</td>
+                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.tanggalMasuk)}</td>
+                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.catatanSupplier || '-')}</td>
+                </tr>
+            `;
+        });
+
+        const printHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Laporan Barang Masuk dari Supplier</title>
+                <style>
+                    body { font-family: 'Segoe UI', 'Inter', Arial, sans-serif; margin: 30px; }
+                    h1 { color: #1e2f5e; font-size: 1.8rem; margin-bottom: 0.2rem; }
+                    .sub { color: #4a5568; margin-bottom: 1.5rem; border-bottom: 2px solid #ccc; padding-bottom: 8px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th { background: #eef2f9; padding: 10px; text-align: left; border: 1px solid #aaa; }
+                    td { border: 1px solid #ccc; padding: 8px; }
+                    .footer { margin-top: 30px; font-size: 0.75rem; text-align: center; color: #666; }
+                </style>
+            </head>
+            <body>
+                <h1>🗂️ Laporan Penerimaan Barang</h1>
+                <div class="sub">Supplier & Stok Masuk · Dicetak: ${todayDate} | Total item: ${incomingItems.length}</div>
+                <table>
+                    <thead>
+                        <tr><th>Nama Barang</th><th>Kategori</th><th>Jumlah</th><th>Unit</th><th>Tanggal Masuk</th><th>Catatan Supplier</th></tr>
+                    </thead>
+                    <tbody>${rowsHtml}</tbody>
+                </table>
+                <div class="footer">Sistem Manajemen Barang Masuk - Data realtime</div>
+            </body>
+            </html>
+        `;
+
+        printWindow.document.write(printHtml);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        // tidak perlu menutup otomatis agar user bisa simpan PDF
+    }
+
+    // ==================== DOWNLOAD CSV ====================
+    function downloadCSV() {
+        if (incomingItems.length === 0) {
+            alert("Tidak ada data untuk di-download. Silakan tambahkan barang terlebih dahulu.");
+            return;
+        }
+
+        // Header CSV
+        const headers = ["Nama Barang", "Kategori", "Jumlah", "Unit", "Tanggal Masuk", "Catatan Supplier"];
+        const rows = incomingItems.map(item => [
+            `"${(item.namaBarang || '').replace(/"/g, '""')}"`,
+            `"${(item.kategori || '').replace(/"/g, '""')}"`,
+            item.jumlah,
+            `"${(item.unit || '').replace(/"/g, '""')}"`,
+            `"${(item.tanggalMasuk || '').replace(/"/g, '""')}"`,
+            `"${(item.catatanSupplier || '').replace(/"/g, '""')}"`
+        ]);
+
+        const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+        const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" }); // BOM for UTF-8
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        const now = new Date();
+        const timestamp = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}`;
+        link.setAttribute("download", `barang_masuk_supplier_${timestamp}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showTemporaryMessage("📁 File CSV berhasil diunduh!");
+    }
+
+    // Event bindings
+    form.addEventListener('submit', addNewItem);
+    resetFormBtn.addEventListener('click', () => {
+        resetFormFields();
+        showTemporaryMessage("🧹 Form sudah dibersihkan");
+    });
+    printBtn.addEventListener('click', printTable);
+    downloadCsvBtn.addEventListener('click', downloadCSV);
 
     // Simple escape HTML untuk keamanan XSS
     function escapeHtml(str) {
