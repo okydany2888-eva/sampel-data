@@ -1,4 +1,3 @@
-# Input-Data
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -55,7 +54,7 @@
         }
 
         .header h1::before {
-            content: "📦";
+            content: "🗂️";
             font-size: 1.9rem;
         }
 
@@ -297,24 +296,29 @@
 <div class="card">
     <div class="header">
         <h1>Input Barang Masuk</h1>
-        <p>From Supplier · Kelola stok dengan rapi</p>
+        <p>Kelola stok dengan rapi</p>
     </div>
 
     <div class="form-container">
         <form id="barangForm">
             <div class="form-row">
                 <div class="form-group">
-                    <label>📛 Nama Barang</label>
-                    <input type="text" id="namaBarang" placeholder="Contoh: Kabel HDMI 2m" required>
+                    <label>📥 Nama Barang</label>
+                    <input type="text" id="namaBarang" placeholder="Contoh: Smoke box, Lume, dll" required>
                 </div>
                 <div class="form-group">
                     <label>🏷️ Kategori</label>
                     <select id="kategori" required>
                         <option value="" disabled selected>-- Pilih kategori --</option>
-                        <option value="Booklet">Booklet</option>
+                        <option value="Booklet 1¼">Booklet 1¼</option>
+                        <option value="Booklet 1¼ + tips">Booklet 1¼ + tips</option>
+                        <option value="Booklet Kss">Booklet Kss</option>
+                        <option value="Booklet Kss + tips">Booklet Kss + tips</option>
                         <option value="Display">Display</option>
-                        <option value="Filter tips">Filter tips</option>
-                        <option value="Trapezoid">Sembako</option>
+                        <option value="Filter tips 21">Filter tips 21</option>
+                        <option value="Filter tips 26">Filter tips 26</option>
+                        <option value="Filter tips 30">Filter tips 30</option>
+                        <option value="Trapezoid">Trapezoid</option>
                         <option value="Sticker">Sticker</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
@@ -334,7 +338,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>📅 Tanggal Masuk</label>
+                    <label>🗓️ Tanggal Masuk</label>
                     <input type="date" id="tanggalMasuk" required>
                 </div>
                 <div class="form-group">
