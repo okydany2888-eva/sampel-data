@@ -1,391 +1,371 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Input Barang Masuk + Pencarian & Ekspor | Supplier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Barang Masuk | Supplier Management</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Inter', 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: linear-gradient(145deg, #e0eafc 0%, #cfdef3 100%);
             min-height: 100vh;
-            padding: 2rem 1.5rem;
+            padding: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
         }
 
-        /* Card utama */
-        .card {
-            max-width: 1400px;
+        /* CARD UTAMA */
+        .app-card {
+            max-width: 1300px;
             width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(0px);
-            border-radius: 36px;
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            transition: transform 0.2s ease;
+            transition: all 0.2s ease;
         }
 
-        .card:hover {
-            transform: translateY(-3px);
-        }
-
-        /* Header */
+        /* HEADER */
         .header {
-            background: #1e2f5e;
-            padding: 1.6rem 2rem;
+            background: #0f2b3d;
+            background: linear-gradient(135deg, #0f2b3d 0%, #1e3a5f 100%);
+            padding: 18px 20px;
             color: white;
         }
-
         .header h1 {
-            font-size: 1.85rem;
+            font-size: 1.6rem;
             font-weight: 600;
-            letter-spacing: -0.3px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-
         .header h1::before {
-            content: "🗂️";
-            font-size: 1.9rem;
+            content: "🏭";
+            font-size: 1.7rem;
         }
-
         .header p {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.85;
-            margin-top: 6px;
-            font-weight: 400;
+            margin-top: 5px;
         }
 
-        /* form area */
-        .form-container {
-            padding: 2rem 2rem 1rem;
+        /* FORM */
+        .form-section {
+            padding: 20px 20px 12px;
         }
-
-        .form-group {
-            margin-bottom: 1.4rem;
+        .form-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .input-group {
+            flex: 1;
+            min-width: 140px;
             display: flex;
             flex-direction: column;
         }
-
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.4rem;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
-
-        label {
-            font-weight: 600;
-            color: #1f2b48;
-            margin-bottom: 6px;
-            font-size: 0.85rem;
+        .input-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #1e2f5e;
+            margin-bottom: 5px;
             letter-spacing: 0.3px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            font-size: 0.95rem;
+        .input-group input, .input-group select {
+            padding: 10px 12px;
             border: 1.5px solid #e2e8f0;
-            border-radius: 20px;
-            background-color: #ffffff;
-            transition: all 0.2s;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: white;
+            transition: 0.2s;
             outline: none;
-            font-weight: 500;
-            color: #0a1c2f;
         }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: #1e2f5e;
-            box-shadow: 0 0 0 3px rgba(30, 47, 94, 0.2);
+        .input-group input:focus, .input-group select:focus {
+            border-color: #1e3a5f;
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.2);
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* tombol aksi */
-        .button-group {
+        .btn-group {
             display: flex;
+            gap: 12px;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
+            margin: 8px 0 4px;
         }
-
         .btn {
             flex: 1;
-            padding: 12px 16px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            border: none;
+            padding: 10px 16px;
             border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
             background: #f1f5f9;
             color: #1e2f5e;
             border: 1px solid #cbd5e1;
         }
-
         .btn-primary {
-            background: #1e2f5e;
+            background: #1e3a5f;
             color: white;
             border: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
+        .btn-primary:active { transform: scale(0.97); background: #0f2b44; }
+        .btn-secondary:active { transform: scale(0.97); }
 
-        .btn-primary:hover {
-            background: #0f2147;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(30, 47, 94, 0.3);
+        /* TABEL & RECORD */
+        .record-area {
+            background: #f9fcff;
+            border-top: 2px solid #e2edf2;
+            padding: 18px 20px 20px;
         }
-
-        .btn-secondary {
-            background: white;
-            border: 1px solid #cbd5e1;
-        }
-
-        .btn-secondary:hover {
-            background: #f8fafc;
-            border-color: #94a3b8;
-        }
-
-        /* daftar barang masuk + search */
-        .record-section {
-            background: #f8fafd;
-            border-top: 2px dashed #cbd5e6;
-            padding: 1.5rem 2rem 2rem;
-        }
-
-        .toolbar {
+        .toolbar-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 1.5rem;
+            gap: 12px;
+            margin-bottom: 18px;
         }
-
-        .record-header {
+        .title-badge {
             display: flex;
             align-items: baseline;
-            flex-wrap: wrap;
             gap: 10px;
-        }
-
-        .record-header h3 {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: #0f2b3d;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .badge-count {
-            background: #e9eef3;
-            padding: 4px 12px;
-            border-radius: 60px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #1e2f5e;
-        }
-
-        /* Search Panel */
-        .search-panel {
-            background: white;
-            padding: 1rem 1.2rem;
-            border-radius: 60px;
-            margin-bottom: 1.5rem;
-            display: flex;
             flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border: 1px solid #e2edf7;
         }
-        .search-group {
-            flex: 1;
-            min-width: 180px;
+        .title-badge h3 {
+            font-size: 1.2rem;
+            color: #0a2b3e;
         }
-        .search-group label {
-            font-size: 0.7rem;
-            margin-bottom: 2px;
-            color: #4a5b7a;
-        }
-        .search-group input, .search-group select {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            border-radius: 40px;
-            background: #f9fcff;
-        }
-        .clear-search {
-            background: none;
-            border: 1px solid #cbd5e1;
-            padding: 8px 18px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: 0.2s;
-            margin-top: 18px;
-        }
-        .clear-search:hover {
-            background: #eef2ff;
-        }
-        .result-info {
-            font-size: 0.75rem;
-            background: #eef2ff;
-            display: inline-block;
+        .badge {
+            background: #e2e8f0;
             padding: 4px 12px;
             border-radius: 30px;
-            margin-left: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #1e2f5e;
         }
-
-        .action-buttons {
+        .action-icons {
             display: flex;
             gap: 12px;
         }
-
-        .small-btn {
-            padding: 8px 20px;
-            font-size: 0.85rem;
+        .icon-btn {
             background: white;
             border: 1px solid #cbd5e1;
+            padding: 6px 16px;
             border-radius: 40px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            transition: 0.2s;
+        }
+        .icon-btn:active { transform: scale(0.96); }
+
+        /* SEARCH BAR */
+        .search-container {
+            background: white;
+            border-radius: 28px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 12px;
+            border: 1px solid #e0edf5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .search-box {
+            flex: 2;
+            min-width: 150px;
+        }
+        .search-box label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 3px;
+            display: block;
+        }
+        .search-box input, .search-box select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e6;
+            background: #fefefe;
+            font-size: 0.8rem;
+        }
+        .reset-filter {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+        .info-result {
+            font-size: 0.7rem;
+            background: #eef2ff;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
         }
 
-        .small-btn:hover {
-            background: #f1f5f9;
-            transform: translateY(-1px);
-        }
-
-        .table-wrapper {
+        /* TABLE WRAPPER SCROLL */
+        .table-wrap {
             overflow-x: auto;
             border-radius: 24px;
+            -webkit-overflow-scrolling: touch;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             background: white;
             border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            min-width: 780px;
         }
-
         th {
-            background-color: #eef2f9;
-            padding: 12px 12px;
-            text-align: left;
-            font-size: 0.75rem;
+            background: #eef2fa;
+            padding: 12px 8px;
+            font-size: 0.7rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             color: #2c3e66;
+            text-transform: uppercase;
         }
-
         td {
-            padding: 12px 12px;
-            border-bottom: 1px solid #eef2f9;
-            font-size: 0.85rem;
-            color: #1f2a40;
-            vertical-align: top;
+            padding: 10px 8px;
+            border-bottom: 1px solid #eef2f5;
+            font-size: 0.8rem;
+            color: #1f2a3e;
         }
-
+        .delete-cell {
+            text-align: center;
+        }
         .delete-btn {
             background: none;
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
             color: #b91c1c;
-            transition: 0.1s;
             padding: 4px 8px;
             border-radius: 30px;
         }
-
-        .delete-btn:hover {
-            background: #fee2e2;
-            transform: scale(1.05);
-        }
-
         .empty-row td {
             text-align: center;
-            padding: 2rem;
-            color: #6c757d;
-            font-style: italic;
+            padding: 32px;
+            color: #6b7280;
+        }
+        footer {
+            font-size: 0.6rem;
+            text-align: center;
+            padding: 12px 16px;
+            background: white;
+            color: #6c7a91;
+            border-top: 1px solid #e9eff5;
         }
 
-        footer {
-            font-size: 0.7rem;
-            text-align: center;
-            padding: 1rem 2rem 1.5rem;
-            color: #6c7a91;
-            background: white;
-            border-top: 1px solid #edf2f7;
+        /* ========= ANDROID PORTRAIT ========= */
+        @media (max-width: 600px) {
+            body { padding: 8px; }
+            .app-card { border-radius: 24px; }
+            .header { padding: 14px 16px; }
+            .header h1 { font-size: 1.3rem; }
+            .header p { font-size: 0.7rem; }
+            .form-section { padding: 14px 14px 8px; }
+            .form-grid { flex-direction: column; gap: 10px; }
+            .input-group { min-width: 100%; }
+            .btn-group { flex-direction: column; gap: 8px; }
+            .record-area { padding: 14px 12px 16px; }
+            .toolbar-row { flex-direction: column; align-items: stretch; }
+            .action-icons { justify-content: flex-end; }
+            .search-container { flex-direction: column; align-items: stretch; border-radius: 24px; padding: 12px; }
+            .reset-filter { align-self: flex-start; margin-top: 4px; }
+            th, td { padding: 8px 6px; font-size: 0.7rem; }
+        }
+
+        /* ========= ANDROID LANDSCAPE (tinggi terbatas) ========= */
+        @media (max-height: 550px) and (orientation: landscape) {
+            body { padding: 6px; }
+            .header { padding: 8px 16px; }
+            .header h1 { font-size: 1.1rem; gap: 6px; }
+            .header p { display: none; }
+            .form-section { padding: 8px 16px 4px; }
+            .form-grid { gap: 8px; margin-bottom: 6px; }
+            .input-group input, .input-group select { padding: 6px 10px; font-size: 0.75rem; }
+            .input-group label { font-size: 0.65rem; }
+            .btn { padding: 5px 12px; font-size: 0.7rem; }
+            .record-area { padding: 8px 12px 12px; }
+            .toolbar-row { margin-bottom: 8px; }
+            .title-badge h3 { font-size: 0.95rem; }
+            .badge { font-size: 0.6rem; padding: 2px 8px; }
+            .icon-btn { padding: 4px 12px; font-size: 0.65rem; }
+            .search-container { padding: 8px 12px; margin-bottom: 10px; gap: 8px; }
+            .search-box input, .search-box select { padding: 5px 8px; font-size: 0.7rem; }
+            .reset-filter { padding: 5px 14px; font-size: 0.65rem; }
+            .table-wrap { max-height: 210px; overflow-y: auto; }
+            th, td { padding: 5px 6px; font-size: 0.65rem; }
+            footer { padding: 6px 12px; font-size: 0.55rem; }
+            .delete-btn { font-size: 1rem; }
+        }
+
+        /* Tablet / bentang lebar landscape */
+        @media (min-width: 700px) and (max-height: 500px) {
+            .table-wrap { max-height: 240px; overflow-y: auto; }
         }
 
         @media print {
             body { background: white; padding: 0; }
-            .card { box-shadow: none; border-radius: 0; }
-            .form-container, .button-group, .toolbar .action-buttons, .search-panel, .delete-btn, footer, .btn, #resetFormBtn, .header p {
-                display: none !important;
+            .app-card { box-shadow: none; border-radius: 0; }
+            .form-section, .btn-group, .search-container, .action-icons, .delete-btn, footer, .reset-filter, .header p {
+                display: none;
             }
-            .record-section { border-top: none; padding: 0; }
-            table { box-shadow: none; }
-            th, td { border: 1px solid #ccc; }
-        }
-
-        @media (max-width: 780px) {
-            body { padding: 1rem; }
-            .search-panel { flex-direction: column; align-items: stretch; border-radius: 24px; }
-            .clear-search { margin-top: 0; align-self: flex-start; }
-            .toolbar { flex-direction: column; align-items: stretch; }
+            .record-area { padding: 0; }
+            table { min-width: auto; border: 1px solid #ccc; }
+            th, td { border: 1px solid #aaa; }
         }
     </style>
 </head>
 <body>
-
-<div class="card">
+<div class="app-card">
     <div class="header">
         <h1>Input Barang Masuk</h1>
-        <p>From Supplier · Pencarian Nama & Kategori · Cetak & Ekspor</p>
+        <p>Manajemen Supplier · Pencarian Nama, Supplier & Kategori · Mobile Ready</p>
     </div>
 
-    <div class="form-container">
-        <form id="barangForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>📝 Nama Barang</label>
-                    <input type="text" id="namaBarang" placeholder="Contoh: Brand" required>
+    <div class="form-section">
+        <form id="itemForm">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>🏢 Nama Supplier</label>
+                    <input type="text" id="supplierName" placeholder="PT. Sumber Jaya" required>
                 </div>
-                <div class="form-group">
-                    <label>🏷️ Kategori</label>
-                    <select id="kategori" required>
-                        <option value="" disabled selected>-- Pilih kategori --</option>
+                <div class="input-group">
+                    <label>📦 Nama Barang</label>
+                    <input type="text" id="productName" placeholder="Kertas / Box Display" required>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>📂 Kategori</label>
+                    <select id="category" required>
+                        <option value="" disabled selected>Pilih kategori</option>
                         <option value="Booklet 1 1/4">Booklet 1 1/4</option>
                         <option value="Booklet 1 1/4 tips">Booklet 1 1/4 tips</option>
                         <option value="Booklet Kss">Booklet Kss</option>
@@ -399,160 +379,146 @@
                         <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
+                <div class="input-group">
                     <label>🔢 Jumlah</label>
-                    <input type="number" id="jumlah" placeholder="0" min="1" required>
+                    <input type="number" id="qty" placeholder="Jumlah" min="1" required>
                 </div>
-                <div class="form-group">
-                    <label>🔖 Satuan / Unit</label>
-                    <input type="text" id="unit" placeholder="pcs, box, kg, sheet, roll" required>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>🗓️ Tanggal Masuk</label>
-                    <input type="date" id="tanggalMasuk" required>
-                </div>
-                <div class="form-group">
-                    <label>✏️ Catatan Supplier</label>
-                    <input type="text" id="catatanSupplier" placeholder="Contoh: PO-123 / invoice #INV-001">
+                <div class="input-group">
+                    <label>📏 Satuan</label>
+                    <input type="text" id="unit" placeholder="pcs, box, kg" required>
                 </div>
             </div>
-
-            <div class="button-group">
-                <button type="submit" class="btn btn-primary">Tambah</button>
-                <button type="button" id="resetFormBtn" class="btn btn-secondary">Reset Form</button>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>📅 Tanggal Masuk</label>
+                    <input type="date" id="entryDate" required>
+                </div>
+                <div class="input-group">
+                    <label>📝 Catatan / PO</label>
+                    <input type="text" id="notes" placeholder="No. PO / Invoice">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">➕ Tambah Barang</button>
+                <button type="button" id="resetFormBtn" class="btn btn-secondary">🔄 Reset Form</button>
             </div>
         </form>
     </div>
 
-    <div class="record-section">
-        <div class="toolbar">
-            <div class="record-header">
-                <h3>📋 Log Penerimaan Barang</h3>
-                <span class="badge-count" id="totalItemCount">0 item</span>
+    <div class="record-area">
+        <div class="toolbar-row">
+            <div class="title-badge">
+                <h3>📋 Log Penerimaan</h3>
+                <span class="badge" id="totalCountBadge">0 item</span>
             </div>
-            <div class="action-buttons">
-                <button id="printTableBtn" class="small-btn">🖨️ Print</button>
-                <button id="downloadCsvBtn" class="small-btn">📎 Download CSV</button>
+            <div class="action-icons">
+                <button id="printAction" class="icon-btn">🖨️ Print</button>
+                <button id="exportCsv" class="icon-btn">📎 CSV</button>
             </div>
         </div>
 
-        <!-- PANEL PENCARIAN: Nama Barang & Kategori -->
-        <div class="search-panel">
-            <div class="search-group" style="flex:2;">
-                <label>🔍 Cari Nama Barang</label>
-                <input type="text" id="searchNama" placeholder="Ketik nama barang / Kategori..." autocomplete="off">
+        <!-- SEARCH + FILTER -->
+        <div class="search-container">
+            <div class="search-box">
+                <label>🔍 Nama Barang</label>
+                <input type="text" id="searchProduct" placeholder="Cari barang...">
             </div>
-            <div class="search-group">
-                <label>📂 Filter Kategori</label>
-                <select id="searchKategori">
-                    <option value="" disabled selected>-- Pilih kategori --</option>
-                        <option value="Booklet 1 1/4">Booklet 1 1/4</option>
-                        <option value="Booklet 1 1/4 tips">Booklet 1 1/4 tips</option>
-                        <option value="Booklet Kss">Booklet Kss</option>
-                        <option value="Booklet Kss tips">Booklet Kss tips</option>
-                        <option value="Display box">Display box</option>
-                        <option value="Filter tips 21">Filter tips 21</option>
-                        <option value="Filter tips 26">Filter tips 26</option>
-                        <option value="Filter tips 30">Filter tips 30</option>
-                        <option value="Trapezoid">Trapezoid</option>
-                        <option value="Sticker">Sticker</option>
-                        <option value="Lainnya">Lainnya</option>
+            <div class="search-box">
+                <label>🏭 Supplier</label>
+                <input type="text" id="searchSupplierField" placeholder="Cari supplier...">
+            </div>
+            <div class="search-box">
+                <label>📂 Kategori</label>
+                <select id="searchCategory">
+                    <option value="">Semua Kategori</option>
+                    <option value="Booklet 1 1/4">Booklet 1 1/4</option>
+                    <option value="Booklet 1 1/4 tips">Booklet 1 1/4 tips</option>
+                    <option value="Booklet Kss">Booklet Kss</option>
+                    <option value="Booklet Kss tips">Booklet Kss tips</option>
+                    <option value="Display box">Display box</option>
+                    <option value="Filter tips 21">Filter tips 21</option>
+                    <option value="Filter tips 26">Filter tips 26</option>
+                    <option value="Filter tips 30">Filter tips 30</option>
+                    <option value="Trapezoid">Trapezoid</option>
+                    <option value="Sticker">Sticker</option>
+                    <option value="Lainnya">Lainnya</option>
                 </select>
             </div>
-            <button id="clearSearchBtn" class="clear-search">✖️ Reset Filter</button>
+            <button id="clearFiltersBtn" class="reset-filter">✖️ Reset Filter</button>
         </div>
-        <div id="searchResultInfo" class="result-info" style="margin-bottom: 12px; display: inline-block;"></div>
+        <div id="filterInfo" class="info-result"></div>
 
-        <div class="table-wrapper">
+        <div class="table-wrap">
             <table id="dataTable">
                 <thead>
-                    <tr>
-                        <th>Nama Barang</th>
-                        <th>Kategori</th>
-                        <th>Jumlah</th>
-                        <th>Unit</th>
-                        <th>Tgl Masuk</th>
-                        <th>Catatan Supplier</th>
-                        <th>Aksi</th>
-                    </tr>
+                    <tr><th>Supplier</th><th>Nama Barang</th><th>Kategori</th><th>Jumlah</th><th>Unit</th><th>Tgl Masuk</th><th>Catatan</th><th style="width:50px">Aksi</th></tr>
                 </thead>
                 <tbody id="tableBody">
-                    <tr class="empty-row">
-                        <td colspan="7">Belum ada data. Silakan tambah barang masuk dari supplier.</td>
-                    </tr>
+                    <tr class="empty-row"><td colspan="8">Belum ada data. Silakan tambah barang masuk.</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <footer>
-        ⚡ Data tersimpan di LocalStorage · Pencarian realtime (nama & kategori)
-    </footer>
+    <footer>⚡ Data tersimpan di LocalStorage | Cepat | Responsif Portrait & Landscape Android</footer>
 </div>
 
 <script>
-    // === Data Storage ===
-    let incomingItems = [];           // semua data asli
-    let filteredItems = [];           // hasil filter untuk ditampilkan
+    // ======================= DATA STORE =======================
+    let masterItems = [];      // semua data asli
+    let filteredItems = [];    // hasil filter
 
-    // DOM elements
-    const form = document.getElementById('barangForm');
-    const namaBarangInput = document.getElementById('namaBarang');
-    const kategoriSelect = document.getElementById('kategori');
-    const jumlahInput = document.getElementById('jumlah');
+    // DOM Elements
+    const form = document.getElementById('itemForm');
+    const supplierInput = document.getElementById('supplierName');
+    const productInput = document.getElementById('productName');
+    const categorySelect = document.getElementById('category');
+    const qtyInput = document.getElementById('qty');
     const unitInput = document.getElementById('unit');
-    const tanggalMasukInput = document.getElementById('tanggalMasuk');
-    const catatanSupplierInput = document.getElementById('catatanSupplier');
-    const resetFormBtn = document.getElementById('resetFormBtn');
-    const tableBody = document.getElementById('tableBody');
-    const totalItemCountSpan = document.getElementById('totalItemCount');
-    const printBtn = document.getElementById('printTableBtn');
-    const downloadCsvBtn = document.getElementById('downloadCsvBtn');
+    const dateInput = document.getElementById('entryDate');
+    const notesInput = document.getElementById('notes');
+    const resetButton = document.getElementById('resetFormBtn');
+    const tbody = document.getElementById('tableBody');
+    const totalBadge = document.getElementById('totalCountBadge');
+    const printBtn = document.getElementById('printAction');
+    const exportBtn = document.getElementById('exportCsv');
+    // filter fields
+    const searchProduct = document.getElementById('searchProduct');
+    const searchSupplierField = document.getElementById('searchSupplierField');
+    const searchCategory = document.getElementById('searchCategory');
+    const clearFilterBtn = document.getElementById('clearFiltersBtn');
+    const filterInfoSpan = document.getElementById('filterInfo');
 
-    // Elemen pencarian
-    const searchNamaInput = document.getElementById('searchNama');
-    const searchKategoriSelect = document.getElementById('searchKategori');
-    const clearSearchBtn = document.getElementById('clearSearchBtn');
-    const searchResultInfo = document.getElementById('searchResultInfo');
-
-    // Helper: set default tanggal hari ini
+    // helper: set default tanggal
     function setDefaultDate() {
-        if (!tanggalMasukInput.value) {
+        if (!dateInput.value) {
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
-            tanggalMasukInput.value = `${yyyy}-${mm}-${dd}`;
+            dateInput.value = `${yyyy}-${mm}-${dd}`;
         }
     }
 
-    // Load from localStorage
-    function loadFromStorage() {
-        const stored = localStorage.getItem('incoming_supplier_items');
+    // load data from localStorage
+    function loadData() {
+        const stored = localStorage.getItem('supplier_goods_app');
         if (stored) {
             try {
-                incomingItems = JSON.parse(stored);
-                if (!Array.isArray(incomingItems)) incomingItems = [];
-            } catch(e) { incomingItems = []; }
+                masterItems = JSON.parse(stored);
+                if (!Array.isArray(masterItems)) masterItems = [];
+            } catch(e) { masterItems = []; }
         } else {
-            incomingItems = [];
+            masterItems = [];
         }
-        applyFilters();  // trigger filter & render
-        updateTotalCount();
+        applyFiltersAndRender();
     }
 
-    // Save to localStorage
-    function saveToStorage() {
-        localStorage.setItem('incoming_supplier_items', JSON.stringify(incomingItems));
+    function saveToLocal() {
+        localStorage.setItem('supplier_goods_app', JSON.stringify(masterItems));
     }
 
-    // Escape HTML
-    function escapeHtml(str) {
+    // escape HTML
+    function escapeHTML(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
@@ -562,283 +528,224 @@
         });
     }
 
-    // Filter logic: berdasarkan Nama Barang (case-insensitive) dan Kategori
-    function applyFilters() {
-        const searchNama = searchNamaInput.value.trim().toLowerCase();
-        const searchKategori = searchKategoriSelect.value;
-
-        filteredItems = incomingItems.filter(item => {
-            let matchNama = true;
-            let matchKategori = true;
-            if (searchNama !== "") {
-                matchNama = (item.namaBarang || "").toLowerCase().includes(searchNama);
-            }
-            if (searchKategori !== "") {
-                matchKategori = (item.kategori || "") === searchKategori;
-            }
-            return matchNama && matchKategori;
-        });
-
-        // update info jumlah hasil pencarian
-        const totalFiltered = filteredItems.length;
-        const totalAll = incomingItems.length;
-        if (searchNama !== "" || searchKategori !== "") {
-            searchResultInfo.textContent = `🔎 Menampilkan ${totalFiltered} dari ${totalAll} item`;
-        } else {
-            searchResultInfo.textContent = `📋 Total semua: ${totalAll} item`;
-        }
-
-        renderTable(filteredItems);
-        updateTotalCountDisplay(totalAll, totalFiltered);
+    // format tanggal tampilan
+    function formatDateYMD(dateStr) {
+        if (!dateStr) return '-';
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
-    // Render tabel berdasarkan data array (bisa filteredItems atau full)
-    function renderTable(itemsToRender) {
-        if (!tableBody) return;
-        if (!itemsToRender || itemsToRender.length === 0) {
-            tableBody.innerHTML = `<tr class="empty-row"><td colspan="7">📭 Tidak ada data sesuai pencarian atau belum ada barang masuk.</td></tr>`;
+    // FILTER + RENDER utama
+    function applyFiltersAndRender() {
+        const keywordProduct = searchProduct.value.trim().toLowerCase();
+        const keywordSupplier = searchSupplierField.value.trim().toLowerCase();
+        const selectedCat = searchCategory.value;
+
+        filteredItems = masterItems.filter(item => {
+            let matchProduct = true;
+            let matchSupplier = true;
+            let matchCat = true;
+            if (keywordProduct) matchProduct = (item.nama || "").toLowerCase().includes(keywordProduct);
+            if (keywordSupplier) matchSupplier = (item.supplier || "").toLowerCase().includes(keywordSupplier);
+            if (selectedCat && selectedCat !== "") matchCat = (item.kategori || "") === selectedCat;
+            return matchProduct && matchSupplier && matchCat;
+        });
+
+        // info text
+        const totalAll = masterItems.length;
+        const showing = filteredItems.length;
+        if (keywordProduct || keywordSupplier || (selectedCat && selectedCat !== "")) {
+            filterInfoSpan.textContent = `🔎 Menampilkan ${showing} dari ${totalAll} item`;
+        } else {
+            filterInfoSpan.textContent = `📋 Total semua: ${totalAll} item`;
+        }
+        totalBadge.textContent = (showing === totalAll) ? `${totalAll} item` : `${showing} / ${totalAll}`;
+
+        renderTable(filteredItems);
+    }
+
+    // render tabel
+    function renderTable(items) {
+        if (!tbody) return;
+        if (!items.length) {
+            tbody.innerHTML = `<tr class="empty-row"><td colspan="8">📭 Tidak ada data sesuai filter / silakan tambah barang.</td></tr>`;
             return;
         }
-
-        let htmlRows = '';
-        itemsToRender.forEach((item, idx) => {
-            // kita butuh index asli untuk hapus? hapus harus berdasarkan incomingItems asli.
-            // cari index asli dari incomingItems menggunakan referensi id atau perbandingan.
-            // Lebih aman: menggunakan properti unik 'id' untuk hapus, karena bisa saja filter mengubah urutan.
-            // Gunakan item.id untuk menemukan index di incomingItems.
-            const originalIndex = incomingItems.findIndex(i => i.id === item.id);
-            const deleteDataIndex = originalIndex !== -1 ? originalIndex : idx;
-            htmlRows += `
-                <tr>
-                    <td><strong>${escapeHtml(item.namaBarang)}</strong></td>
-                    <td>${escapeHtml(item.kategori)}</td>
-                    <td>${item.jumlah}</td>
-                    <td>${escapeHtml(item.unit)}</td>
-                    <td>${escapeHtml(item.tanggalMasuk)}</td>
-                    <td>${escapeHtml(item.catatanSupplier || '-')}</td>
-                    <td style="text-align: center;"><button class="delete-btn" data-id="${item.id}" title="Hapus barang">🗑️</button></td>
-                </td>
+        let html = '';
+        items.forEach(item => {
+            html += `
+                <tr data-id="${item.id}">
+                    <td>${escapeHTML(item.supplier)}</td>
+                    <td>${escapeHTML(item.nama)}</td>
+                    <td>${escapeHTML(item.kategori)}</td>
+                    <td>${escapeHTML(String(item.jumlah))}</td>
+                    <td>${escapeHTML(item.unit)}</td>
+                    <td>${escapeHTML(formatDateYMD(item.tanggal))}</td>
+                    <td>${escapeHTML(item.catatan || '-')}</td>
+                    <td class="delete-cell"><button class="delete-btn" data-id="${item.id}" title="Hapus">🗑️</button></td>
+                </tr>
             `;
         });
-        tableBody.innerHTML = htmlRows;
-
-        // Attach delete events menggunakan data-id
-        const deleteButtons = document.querySelectorAll('.delete-btn');
-        deleteButtons.forEach(btn => {
+        tbody.innerHTML = html;
+        // attach delete events
+        document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = btn.getAttribute('data-id');
-                if (id) deleteItemById(id);
                 e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                if (id) deleteById(id);
             });
         });
     }
 
-    function deleteItemById(id) {
-        const index = incomingItems.findIndex(item => item.id == id);
-        if (index !== -1) {
-            incomingItems.splice(index, 1);
-            saveToStorage();
-            applyFilters();   // refresh filter & tampilan
-            showTemporaryMessage("✅ Item berhasil dihapus");
+    function deleteById(id) {
+        const newArr = masterItems.filter(it => String(it.id) !== String(id));
+        if (newArr.length !== masterItems.length) {
+            masterItems = newArr;
+            saveToLocal();
+            applyFiltersAndRender();
         }
     }
 
-    function addNewItem(event) {
-        event.preventDefault();
-
-        const namaBarang = namaBarangInput.value.trim();
-        const kategori = kategoriSelect.value;
-        const jumlahRaw = jumlahInput.value.trim();
-        const unit = unitInput.value.trim();
-        const tanggalMasuk = tanggalMasukInput.value;
-        const catatanSupplier = catatanSupplierInput.value.trim();
-
-        if (!namaBarang) { alert("❌ Nama barang harus diisi!"); namaBarangInput.focus(); return; }
-        if (!kategori) { alert("❌ Silakan pilih kategori!"); kategoriSelect.focus(); return; }
-        if (!jumlahRaw || parseInt(jumlahRaw) <= 0) { alert("❌ Jumlah harus diisi angka positif!"); jumlahInput.focus(); return; }
-        if (!unit) { alert("❌ Unit/satuan wajib diisi!"); unitInput.focus(); return; }
-        if (!tanggalMasuk) { alert("❌ Tanggal masuk harus dipilih!"); tanggalMasukInput.focus(); return; }
-
-        const jumlah = parseInt(jumlahRaw, 10);
-        const newItem = {
-            id: Date.now() + Math.random() * 10000,   // unique id
-            namaBarang: namaBarang,
-            kategori: kategori,
-            jumlah: jumlah,
-            unit: unit,
-            tanggalMasuk: tanggalMasuk,
-            catatanSupplier: catatanSupplier || ""
+    // tambah item baru
+    function addNewItem(data) {
+        const newId = Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+        const newEntry = {
+            id: newId,
+            supplier: data.supplier,
+            nama: data.nama,
+            kategori: data.kategori,
+            jumlah: data.jumlah,
+            unit: data.unit,
+            tanggal: data.tanggal,
+            catatan: data.catatan || ''
         };
-
-        incomingItems.push(newItem);
-        saveToStorage();
-        resetFormFields();
-        setDefaultDate();
-        namaBarangInput.focus();
-        // reset filter agar barang baru langsung terlihat (opsional: bersihkan pencarian)
-        // biar user senang, kita reset filter biar langsung kelihatan: 
-        searchNamaInput.value = '';
-        searchKategoriSelect.value = '';
-        applyFilters();
-        showTemporaryMessage("✨ Barang berhasil ditambahkan!");
+        masterItems.unshift(newEntry);
+        saveToLocal();
+        applyFiltersAndRender();
     }
 
+    // reset form
     function resetFormFields() {
-        namaBarangInput.value = '';
-        kategoriSelect.value = '';
-        jumlahInput.value = '';
-        unitInput.value = '';
-        catatanSupplierInput.value = '';
-        tanggalMasukInput.value = '';
+        form.reset();
         setDefaultDate();
+        categorySelect.value = "";
+        supplierInput.focus();
     }
 
-    function updateTotalCountDisplay(totalAll, filteredTotal) {
-        totalItemCountSpan.innerText = `${totalAll} ${totalAll === 1 ? 'item' : 'item'}`;
-    }
+    // handle submit
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const supplier = supplierInput.value.trim();
+        const nama = productInput.value.trim();
+        const kategori = categorySelect.value;
+        const jumlahRaw = qtyInput.value.trim();
+        const unit = unitInput.value.trim();
+        const tanggal = dateInput.value;
+        const catatan = notesInput.value.trim();
 
-    function updateTotalCount() {
-        updateTotalCountDisplay(incomingItems.length, filteredItems.length);
-    }
+        if (!supplier) { alert("Supplier harus diisi!"); supplierInput.focus(); return; }
+        if (!nama) { alert("Nama barang harus diisi!"); productInput.focus(); return; }
+        if (!kategori) { alert("Pilih kategori!"); return; }
+        if (!jumlahRaw || parseInt(jumlahRaw) <= 0) { alert("Jumlah harus >0"); qtyInput.focus(); return; }
+        if (!unit) { alert("Satuan harus diisi!"); unitInput.focus(); return; }
+        if (!tanggal) { alert("Tanggal masuk wajib"); return; }
 
-    let messageTimeout = null;
-    function showTemporaryMessage(msg) {
-        let toastEl = document.getElementById('dynamicToast');
-        if (!toastEl) {
-            toastEl = document.createElement('div');
-            toastEl.id = 'dynamicToast';
-            toastEl.style.position = 'fixed';
-            toastEl.style.bottom = '25px';
-            toastEl.style.left = '50%';
-            toastEl.style.transform = 'translateX(-50%)';
-            toastEl.style.backgroundColor = '#1e2f5e';
-            toastEl.style.color = 'white';
-            toastEl.style.padding = '10px 20px';
-            toastEl.style.borderRadius = '60px';
-            toastEl.style.fontSize = '0.85rem';
-            toastEl.style.fontWeight = '500';
-            toastEl.style.zIndex = '999';
-            toastEl.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
-            toastEl.style.background = '#0f2a3ecc';
-            document.body.appendChild(toastEl);
-        }
-        toastEl.textContent = msg;
-        toastEl.style.opacity = '1';
-        if (messageTimeout) clearTimeout(messageTimeout);
-        messageTimeout = setTimeout(() => {
-            if (toastEl) toastEl.style.opacity = '0';
-        }, 2000);
-    }
-
-    // ==================== PRINT FUNCTION ====================
-    function printTable() {
-        // cetak berdasarkan data yang sedang tampil (filteredItems) lebih relevan
-        const dataToPrint = filteredItems.length > 0 ? filteredItems : incomingItems;
-        if (dataToPrint.length === 0) {
-            alert("Tidak ada data untuk dicetak.");
-            return;
-        }
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-            alert("Harap izinkan pop-up untuk mencetak.");
-            return;
-        }
-        const todayDate = new Date().toLocaleDateString('id-ID');
-        let rowsHtml = '';
-        dataToPrint.forEach(item => {
-            rowsHtml += `
-                <tr>
-                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.namaBarang)}</td>
-                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.kategori)}</td>
-                    <td style="border:1px solid #ccc; padding:8px; text-align:right;">${item.jumlah}</td>
-                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.unit)}</td>
-                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.tanggalMasuk)}</td>
-                    <td style="border:1px solid #ccc; padding:8px;">${escapeHtml(item.catatanSupplier || '-')}</td>
-                </tr>
-            `;
+        addNewItem({
+            supplier: supplier,
+            nama: nama,
+            kategori: kategori,
+            jumlah: parseInt(jumlahRaw),
+            unit: unit,
+            tanggal: tanggal,
+            catatan: catatan
         });
-        const printHtml = `
-            <!DOCTYPE html>
-            <html>
-            <head><meta charset="UTF-8"><title>Laporan Barang Masuk</title>
-            <style>
-                body { font-family: 'Segoe UI', Arial; margin: 30px; }
-                h1 { color: #1e2f5e; }
-                .sub { margin-bottom: 1.5rem; border-bottom: 2px solid #aaa; padding-bottom: 8px; }
-                table { width: 100%; border-collapse: collapse; }
-                th { background: #eef2f9; padding: 10px; border: 1px solid #aaa; text-align:left; }
-                td { border: 1px solid #ccc; padding: 8px; }
-                .footer { margin-top: 25px; text-align: center; font-size: 0.75rem; }
-            </style>
-            </head>
-            <body>
-                <h1>🗂️ Laporan Penerimaan Barang</h1>
-                <div class="sub">Supplier · Dicetak: ${todayDate} | Total tampil: ${dataToPrint.length} item</div>
-                <table><thead><tr><th>Nama Barang</th><th>Kategori</th><th>Jumlah</th><th>Unit</th><th>Tgl Masuk</th><th>Catatan Supplier</th></tr></thead>
-                <tbody>${rowsHtml}</tbody></table>
-                <div class="footer">Sistem Manajemen Inventory</div>
-            </body>
-            </html>
-        `;
-        printWindow.document.write(printHtml);
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-    }
+        resetFormFields();
+    });
 
-    // ==================== DOWNLOAD CSV ====================
-    function downloadCSV() {
-        const dataToExport = filteredItems.length > 0 ? filteredItems : incomingItems;
-        if (dataToExport.length === 0) {
-            alert("Tidak ada data untuk di-download.");
+    resetButton.addEventListener('click', () => resetFormFields());
+
+    // event filter
+    searchProduct.addEventListener('input', () => applyFiltersAndRender());
+    searchSupplierField.addEventListener('input', () => applyFiltersAndRender());
+    searchCategory.addEventListener('change', () => applyFiltersAndRender());
+    clearFilterBtn.addEventListener('click', () => {
+        searchProduct.value = '';
+        searchSupplierField.value = '';
+        searchCategory.value = '';
+        applyFiltersAndRender();
+    });
+
+    // PRINT (hilangkan kolom aksi)
+    printBtn.addEventListener('click', () => {
+        const originalTable = document.getElementById('dataTable');
+        const cloneTable = originalTable.cloneNode(true);
+        // hapus kolom aksi (kolom terakhir) di header & body
+        const thead = cloneTable.querySelector('thead tr');
+        if (thead && thead.children.length >= 8) {
+            thead.children[7].textContent = '';
+        }
+        const bodyRows = cloneTable.querySelectorAll('tbody tr');
+        bodyRows.forEach(row => {
+            const lastCell = row.querySelector('td:last-child');
+            if (lastCell) lastCell.textContent = '';
+        });
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html><head><title>Laporan Barang Masuk</title>
+            <style>
+                body { font-family: sans-serif; margin: 24px; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #aaa; padding: 8px; text-align: left; }
+                th { background: #f1f5f9; }
+                h2 { color: #1e2f5e; }
+            </style>
+            </head><body>
+            <h2>📦 Laporan Penerimaan Barang dari Supplier</h2>
+            ${cloneTable.outerHTML}
+            <p><small>Dicetak: ${new Date().toLocaleString()}</small></p>
+            </body></html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    });
+
+    // EXPORT CSV berdasarkan data yang tampil (filter aktif)
+    exportBtn.addEventListener('click', () => {
+        const dataToExport = filteredItems.length ? filteredItems : masterItems;
+        if (!dataToExport.length) {
+            alert("Tidak ada data untuk diekspor.");
             return;
         }
-        const headers = ["Nama Barang", "Kategori", "Jumlah", "Unit", "Tanggal Masuk", "Catatan Supplier"];
-        const rows = dataToExport.map(item => [
-            `"${(item.namaBarang || '').replace(/"/g, '""')}"`,
-            `"${(item.kategori || '').replace(/"/g, '""')}"`,
-            item.jumlah,
-            `"${(item.unit || '').replace(/"/g, '""')}"`,
-            `"${(item.tanggalMasuk || '').replace(/"/g, '""')}"`,
-            `"${(item.catatanSupplier || '').replace(/"/g, '""')}"`
-        ]);
-        const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-        const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
+        const headers = ['Supplier', 'Nama Barang', 'Kategori', 'Jumlah', 'Satuan', 'Tanggal Masuk', 'Catatan'];
+        const csvRows = [];
+        csvRows.push(headers.join(','));
+        for (const item of dataToExport) {
+            const row = [
+                `"${(item.supplier || '').replace(/"/g, '""')}"`,
+                `"${(item.nama || '').replace(/"/g, '""')}"`,
+                `"${(item.kategori || '').replace(/"/g, '""')}"`,
+                item.jumlah,
+                `"${(item.unit || '').replace(/"/g, '""')}"`,
+                `"${item.tanggal || ''}"`,
+                `"${(item.catatan || '').replace(/"/g, '""')}"`
+            ];
+            csvRows.push(row.join(','));
+        }
+        const blob = new Blob(["\uFEFF" + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        const now = new Date();
-        const timestamp = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}`;
-        link.setAttribute("download", `barang_masuk_${timestamp}.csv`);
+        link.href = url;
+        link.setAttribute('download', `barang_masuk_${new Date().toISOString().slice(0,19)}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
-        showTemporaryMessage("📁 File CSV berhasil diunduh!");
-    }
+    });
 
-    // reset filter
-    function resetFilters() {
-        searchNamaInput.value = '';
-        searchKategoriSelect.value = '';
-        applyFilters();
-        showTemporaryMessage("Filter direset, semua data tampil");
-    }
-
-    // Event listeners
-    form.addEventListener('submit', addNewItem);
-    resetFormBtn.addEventListener('click', () => { resetFormFields(); showTemporaryMessage("🧹 Form dibersihkan"); });
-    printBtn.addEventListener('click', printTable);
-    downloadCsvBtn.addEventListener('click', downloadCSV);
-    searchNamaInput.addEventListener('input', applyFilters);
-    searchKategoriSelect.addEventListener('change', applyFilters);
-    clearSearchBtn.addEventListener('click', resetFilters);
-
-    function init() {
-        loadFromStorage();
-        setDefaultDate();
-    }
-    init();
+    // init
+    setDefaultDate();
+    loadData();
 </script>
 </body>
 </html>
