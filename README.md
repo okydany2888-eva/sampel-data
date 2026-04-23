@@ -394,8 +394,8 @@
                     <input type="number" id="jumlah" placeholder="0" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label>📦 Satuan / Unit</label>
-                    <input type="text" id="unit" placeholder="pcs, box, kg, liter" required>
+                    <label>🔖 Satuan / Unit</label>
+                    <input type="text" id="unit" placeholder="pcs, box, kg, sheet, roll" required>
                 </div>
             </div>
 
