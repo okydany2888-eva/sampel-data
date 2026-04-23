@@ -1,4 +1,5 @@
-# Input-data<!DOCTYPE html>
+# Input-data
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
