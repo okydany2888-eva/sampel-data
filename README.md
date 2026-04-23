@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Form Input Barang Masuk dari Supplier</title>
+    <title>Input Barang Masuk + Print & Download | Supplier</title>
     <style>
         * {
             margin: 0;
@@ -22,7 +22,7 @@
 
         /* Card utama */
         .card {
-            max-width: 720px;
+            max-width: 1280px;
             width: 100%;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.96);
@@ -67,7 +67,7 @@
 
         /* form area */
         .form-container {
-            padding: 2rem 2rem 1.8rem;
+            padding: 2rem 2rem 1rem;
         }
 
         .form-group {
@@ -99,11 +99,6 @@
             gap: 6px;
         }
 
-        label i {
-            font-style: normal;
-            font-weight: 500;
-        }
-
         input, select, textarea {
             width: 100%;
             padding: 12px 14px;
@@ -132,8 +127,8 @@
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .btn {
@@ -173,6 +168,16 @@
             border-color: #94a3b8;
         }
 
+        .btn-outline {
+            background: white;
+            border: 1px solid #1e2f5e;
+            color: #1e2f5e;
+        }
+
+        .btn-outline:hover {
+            background: #eef2ff;
+        }
+
         /* daftar barang masuk */
         .record-section {
             background: #f8fafd;
@@ -180,13 +185,20 @@
             padding: 1.5rem 2rem 2rem;
         }
 
-        .record-header {
+        .toolbar {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 1.5rem;
+        }
+
+        .record-header {
+            display: flex;
             align-items: baseline;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 1.2rem;
         }
 
         .record-header h3 {
@@ -199,13 +211,36 @@
         }
 
         .badge-count {
-            background: #1e2f5e20;
-            background-color: #e9eef3;
+            background: #e9eef3;
             padding: 4px 12px;
             border-radius: 60px;
             font-size: 0.8rem;
             font-weight: 600;
             color: #1e2f5e;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .small-btn {
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .small-btn:hover {
+            background: #f1f5f9;
+            transform: translateY(-1px);
         }
 
         .table-wrapper {
@@ -244,7 +279,7 @@
         .delete-btn {
             background: none;
             border: none;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: pointer;
             color: #b91c1c;
             transition: 0.1s;
@@ -273,7 +308,35 @@
             border-top: 1px solid #edf2f7;
         }
 
-        @media (max-width: 580px) {
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            .card {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .form-container, .button-group, .toolbar .action-buttons, .delete-btn, footer, .btn, #resetFormBtn, .header p {
+                display: none !important;
+            }
+            .record-section {
+                border-top: none;
+                padding: 0;
+            }
+            table {
+                box-shadow: none;
+            }
+            th, td {
+                border: 1px solid #ccc;
+            }
+            .badge-count {
+                background: none;
+            }
+        }
+
+        @media (max-width: 680px) {
             body {
                 padding: 1rem;
             }
@@ -281,12 +344,12 @@
                 padding-left: 1.2rem;
                 padding-right: 1.2rem;
             }
-            th, td {
-                font-size: 0.75rem;
-                padding: 8px 6px;
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
             }
-            .btn {
-                font-size: 0.85rem;
+            .action-buttons {
+                justify-content: flex-start;
             }
         }
     </style>
@@ -296,25 +359,25 @@
 <div class="card">
     <div class="header">
         <h1>Input Barang Masuk</h1>
-        <p>Kelola stok dengan rapi</p>
+        <p>Kelola stok + Cetak & Ekspor Data</p>
     </div>
 
     <div class="form-container">
         <form id="barangForm">
             <div class="form-row">
                 <div class="form-group">
-                    <label>📥 Nama Barang</label>
+                    <label>📝 Nama Barang</label>
                     <input type="text" id="namaBarang" placeholder="Contoh: Smoke box, Lume, dll" required>
                 </div>
                 <div class="form-group">
                     <label>🏷️ Kategori</label>
                     <select id="kategori" required>
                         <option value="" disabled selected>-- Pilih kategori --</option>
-                        <option value="Booklet 1¼">Booklet 1¼</option>
-                        <option value="Booklet 1¼ + tips">Booklet 1¼ + tips</option>
+                        <option value="Booklet 1 1/4">Booklet 1 1/4</option>
+                        <option value="Booklet 1 1/4 tips">Booklet 1 1/4 tips</option>
                         <option value="Booklet Kss">Booklet Kss</option>
-                        <option value="Booklet Kss + tips">Booklet Kss + tips</option>
-                        <option value="Display">Display</option>
+                        <option value="Booklet Kss tips">Booklet Kss tips</option>
+                        <option value="Display box">Display box</option>
                         <option value="Filter tips 21">Filter tips 21</option>
                         <option value="Filter tips 26">Filter tips 26</option>
                         <option value="Filter tips 30">Filter tips 30</option>
@@ -355,9 +418,15 @@
     </div>
 
     <div class="record-section">
-        <div class="record-header">
-            <h3>📋 Log Penerimaan Barang</h3>
-            <span class="badge-count" id="totalItemCount">0 item</span>
+        <div class="toolbar">
+            <div class="record-header">
+                <h3>📋 Log Penerimaan Barang</h3>
+                <span class="badge-count" id="totalItemCount">0 item</span>
+            </div>
+            <div class="action-buttons">
+                <button id="printTableBtn" class="small-btn">🖨️ Print</button>
+                <button id="downloadCsvBtn" class="small-btn">📎 Download CSV</button>
+            </div>
         </div>
         <div class="table-wrapper">
             <table id="dataTable">
@@ -381,13 +450,13 @@
         </div>
     </div>
     <footer>
-        ⚡ Data tersimpan di lokal (LocalStorage) · Refresh halaman tidak akan hilang
+        ⚡ Data tersimpan di LocalStorage · Print & Download siap digunakan
     </footer>
 </div>
 
 <script>
-    // === Data storage ===
-    let incomingItems = [];       // array of objects
+    // === Data Storage ===
+    let incomingItems = [];
 
     // DOM elements
     const form = document.getElementById('barangForm');
@@ -403,7 +472,7 @@
     const printBtn = document.getElementById('printTableBtn');
     const downloadCsvBtn = document.getElementById('downloadCsvBtn');
 
-    // Helper: set default tanggal hari ini (YYYY-MM-DD)
+    // Helper: set default tanggal hari ini
     function setDefaultDate() {
         if (!tanggalMasukInput.value) {
             const today = new Date();
@@ -414,20 +483,16 @@
         }
     }
 
-    // Load data from localStorage
+    // Load from localStorage
     function loadFromStorage() {
         const stored = localStorage.getItem('incoming_supplier_items');
         if (stored) {
             try {
                 incomingItems = JSON.parse(stored);
-                // validasi sedikit: pastikan array
                 if (!Array.isArray(incomingItems)) incomingItems = [];
             } catch(e) { incomingItems = []; }
         } else {
-            // Data contoh (optional, supaya tidak kosong sama sekali)
             incomingItems = [];
-            // contoh jika ingin demo isi 1 sample? lebih baik kosong dulu, tapi boleh demo
-            // Tapi biar bersih: kosong, user bisa nambah sendiri
         }
         renderTable();
         updateTotalCount();
@@ -438,10 +503,20 @@
         localStorage.setItem('incoming_supplier_items', JSON.stringify(incomingItems));
     }
 
-    // Render table berdasarkan incomingItems
+    // Escape HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Render tabel
     function renderTable() {
         if (!tableBody) return;
-        
         if (incomingItems.length === 0) {
             tableBody.innerHTML = `<tr class="empty-row"><td colspan="7">📭 Belum ada data. Silakan tambah barang masuk dari supplier.</td></tr>`;
             return;
@@ -449,12 +524,6 @@
 
         let htmlRows = '';
         incomingItems.forEach((item, index) => {
-            // format tanggal yang lebih rapi (opsional)
-            let tglTampil = item.tanggalMasuk;
-            if (tglTampil) {
-                // jika ingin format dd/mm/yyyy, biar rapi? tapi tetap pakai yyyy-mm-dd juga oke
-                // kita tampilkan asli simpanan
-            }
             htmlRows += `
                 <tr>
                     <td><strong>${escapeHtml(item.namaBarang)}</strong></td>
@@ -469,36 +538,30 @@
         });
         tableBody.innerHTML = htmlRows;
 
-        // attach event listener ke semua tombol hapus
+        // Attach delete events
         const deleteButtons = document.querySelectorAll('.delete-btn');
         deleteButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = parseInt(btn.getAttribute('data-index'), 10);
-                if (!isNaN(idx)) {
-                    deleteItem(idx);
-                }
+                if (!isNaN(idx)) deleteItem(idx);
                 e.stopPropagation();
             });
         });
     }
 
-    // Hapus item berdasarkan index
     function deleteItem(index) {
         if (index >= 0 && index < incomingItems.length) {
             incomingItems.splice(index, 1);
             saveToStorage();
             renderTable();
             updateTotalCount();
-            // optional: feedback halus (tidak pakai alert biar smooth)
             showTemporaryMessage("✅ Item berhasil dihapus");
         }
     }
 
-    // Fungsi untuk menambah item baru
     function addNewItem(event) {
         event.preventDefault();
 
-        // ambil value dan trim
         const namaBarang = namaBarangInput.value.trim();
         const kategori = kategoriSelect.value;
         const jumlahRaw = jumlahInput.value.trim();
@@ -506,40 +569,15 @@
         const tanggalMasuk = tanggalMasukInput.value;
         const catatanSupplier = catatanSupplierInput.value.trim();
 
-        // validasi mandatory
-        if (!namaBarang) {
-            alert("❌ Nama barang harus diisi!");
-            namaBarangInput.focus();
-            return;
-        }
-        if (!kategori) {
-            alert("❌ Silakan pilih kategori!");
-            kategoriSelect.focus();
-            return;
-        }
-        if (!jumlahRaw || parseInt(jumlahRaw) <= 0) {
-            alert("❌ Jumlah harus diisi dengan angka positif!");
-            jumlahInput.focus();
-            return;
-        }
-        if (!unit) {
-            alert("❌ Unit/satuan wajib diisi (contoh: pcs, box, kg)!");
-            unitInput.focus();
-            return;
-        }
-        if (!tanggalMasuk) {
-            alert("❌ Tanggal masuk harus dipilih!");
-            tanggalMasukInput.focus();
-            return;
-        }
+        if (!namaBarang) { alert("❌ Nama barang harus diisi!"); namaBarangInput.focus(); return; }
+        if (!kategori) { alert("❌ Silakan pilih kategori!"); kategoriSelect.focus(); return; }
+        if (!jumlahRaw || parseInt(jumlahRaw) <= 0) { alert("❌ Jumlah harus diisi angka positif!"); jumlahInput.focus(); return; }
+        if (!unit) { alert("❌ Unit/satuan wajib diisi!"); unitInput.focus(); return; }
+        if (!tanggalMasuk) { alert("❌ Tanggal masuk harus dipilih!"); tanggalMasukInput.focus(); return; }
 
         const jumlah = parseInt(jumlahRaw, 10);
-        
-        // cek duplikat ringan? optional tidak perlu strict, bebas
-
-        // siapkan object item
         const newItem = {
-            id: Date.now() + Math.random() * 1000, // id sederhana untuk key (opsional)
+            id: Date.now() + Math.random(),
             namaBarang: namaBarang,
             kategori: kategori,
             jumlah: jumlah,
@@ -552,39 +590,29 @@
         saveToStorage();
         renderTable();
         updateTotalCount();
-
-        // reset form setelah sukses (kecuali tanggal bisa tetap hari ini tapi biarkan kosong & isi default lagi)
         resetFormFields();
-        setDefaultDate();   // set default tanggal lagi ke hari ini
-        // fokus ke nama barang untuk kemudahan input cepat
+        setDefaultDate();
         namaBarangInput.focus();
-
-        // feedback mini (tidak mengganggu)
         showTemporaryMessage("✨ Barang berhasil ditambahkan!");
     }
 
-    // reset form fields (tapi tidak menghapus data localStorage, hanya bersihkan form)
     function resetFormFields() {
         namaBarangInput.value = '';
         kategoriSelect.value = '';
         jumlahInput.value = '';
         unitInput.value = '';
         catatanSupplierInput.value = '';
-        // tanggal akan diisi default di setDefaultDate, tapi sementara kosong lalu set Default
         tanggalMasukInput.value = '';
-        setDefaultDate();   // set tanggal hari ini
+        setDefaultDate();
     }
 
-    // update total item di badge
     function updateTotalCount() {
         const total = incomingItems.length;
         totalItemCountSpan.innerText = `${total} ${total === 1 ? 'item' : 'item'}`;
     }
 
-    // pesan sementara (tanpa alert)
     let messageTimeout = null;
     function showTemporaryMessage(msg) {
-        // cek apakah ada elemen floating? kita buat dynamic toast sederhana
         let toastEl = document.getElementById('dynamicToast');
         if (!toastEl) {
             toastEl = document.createElement('div');
@@ -601,18 +629,17 @@
             toastEl.style.fontWeight = '500';
             toastEl.style.zIndex = '999';
             toastEl.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
-            toastEl.style.backdropFilter = 'blur(4px)';
             toastEl.style.background = '#0f2a3ecc';
             document.body.appendChild(toastEl);
         }
         toastEl.textContent = msg;
         toastEl.style.opacity = '1';
-        toastEl.style.transition = 'opacity 0.2s';
         if (messageTimeout) clearTimeout(messageTimeout);
         messageTimeout = setTimeout(() => {
             if (toastEl) toastEl.style.opacity = '0';
         }, 2000);
     }
+
     // ==================== PRINT FUNCTION ====================
     function printTable() {
         if (incomingItems.length === 0) {
@@ -719,33 +746,10 @@
     printBtn.addEventListener('click', printTable);
     downloadCsvBtn.addEventListener('click', downloadCSV);
 
-    // Simple escape HTML untuk keamanan XSS
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
-        });
-    }
-
-    // Event listener form submit
-    form.addEventListener('submit', addNewItem);
-    resetFormBtn.addEventListener('click', () => {
-        resetFormFields();
-        showTemporaryMessage("🧹 Form sudah dibersihkan");
-    });
-
-    // inisialisasi awal: load data, set default date, render table
     function init() {
         loadFromStorage();
         setDefaultDate();
-        // tambahan event untuk mencegah submit double
     }
-
     init();
 </script>
 </body>
