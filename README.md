@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Barang Masuk | Supplier Management</title>
+    <title>Inventory Barang Masuk | Supplier Management</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +13,8 @@
         }
 
         body {
-            background: linear-gradient(145deg, #e0eafc 0%, #cfdef3 100%);
+            background: #eef2f7;
+            background: linear-gradient(145deg, #e9eef4 0%, #dce5ef 100%);
             min-height: 100vh;
             padding: 12px;
             display: flex;
@@ -21,60 +23,61 @@
             font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
         }
 
-        /* CARD UTAMA */
-        .app-card {
-            max-width: 1300px;
+        /* MAIN CARD */
+        .app-container {
+            max-width: 1280px;
             width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.97);
-            border-radius: 32px;
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.3);
+            background: #ffffff;
+            border-radius: 36px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         /* HEADER */
-        .header {
-            background: #0f2b3d;
-            background: linear-gradient(135deg, #0f2b3d 0%, #1e3a5f 100%);
-            padding: 18px 20px;
+        .app-header {
+            background: linear-gradient(115deg, #0f2b3d 0%, #1e4068 100%);
+            padding: 20px 22px;
             color: white;
         }
-        .header h1 {
-            font-size: 1.6rem;
-            font-weight: 600;
+        .app-header h1 {
+            font-size: 1.65rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
         }
-        .header h1::before {
-            content: "🏭";
-            font-size: 1.7rem;
+        .app-header h1:before {
+            content: "📦";
+            font-size: 1.8rem;
         }
-        .header p {
+        .app-header p {
             font-size: 0.8rem;
             opacity: 0.85;
-            margin-top: 5px;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
         }
 
-        /* FORM */
-        .form-section {
-            padding: 20px 20px 12px;
+        /* FORM SECTION */
+        .form-wrapper {
+            padding: 22px 24px 16px;
+            background: #ffffff;
         }
-        .form-grid {
+        .grid-2cols {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-bottom: 18px;
         }
-        .input-group {
+        .input-field {
             flex: 1;
-            min-width: 140px;
+            min-width: 150px;
             display: flex;
             flex-direction: column;
         }
-        .input-group label {
+        .input-field label {
             font-size: 0.75rem;
             font-weight: 700;
             color: #1e2f5e;
@@ -84,37 +87,38 @@
             align-items: center;
             gap: 5px;
         }
-        .input-group input, .input-group select {
-            padding: 10px 12px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 18px;
+        .input-field input, .input-field select {
+            padding: 11px 14px;
+            border: 1.5px solid #e2edf2;
+            border-radius: 24px;
             font-size: 0.85rem;
-            background: white;
+            background: #ffffff;
             transition: 0.2s;
             outline: none;
+            font-weight: 500;
         }
-        .input-group input:focus, .input-group select:focus {
-            border-color: #1e3a5f;
-            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.2);
+        .input-field input:focus, .input-field select:focus {
+            border-color: #1e4068;
+            box-shadow: 0 0 0 3px rgba(30, 64, 104, 0.15);
         }
-        .btn-group {
+        .btn-row {
             display: flex;
-            gap: 12px;
+            gap: 14px;
             flex-wrap: wrap;
-            margin: 8px 0 4px;
+            margin: 16px 0 8px;
         }
         .btn {
             flex: 1;
-            padding: 10px 16px;
-            border-radius: 40px;
-            font-weight: 600;
+            padding: 11px 18px;
+            border-radius: 44px;
+            font-weight: 700;
             font-size: 0.85rem;
             border: none;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
             background: #f1f5f9;
             color: #1e2f5e;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #cbd5e6;
         }
         .btn-primary {
             background: #1e3a5f;
@@ -125,46 +129,47 @@
         .btn-primary:active { transform: scale(0.97); background: #0f2b44; }
         .btn-secondary:active { transform: scale(0.97); }
 
-        /* TABEL & RECORD */
-        .record-area {
-            background: #f9fcff;
-            border-top: 2px solid #e2edf2;
-            padding: 18px 20px 20px;
+        /* RECORD AREA */
+        .record-panel {
+            background: #fbfdff;
+            border-top: 2px solid #eef3fc;
+            padding: 20px 24px 24px;
         }
-        .toolbar-row {
+        .toolbar-flex {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 14px;
             margin-bottom: 18px;
         }
-        .title-badge {
+        .title-count {
             display: flex;
             align-items: baseline;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
         }
-        .title-badge h3 {
-            font-size: 1.2rem;
+        .title-count h3 {
+            font-size: 1.25rem;
             color: #0a2b3e;
+            font-weight: 700;
         }
-        .badge {
-            background: #e2e8f0;
-            padding: 4px 12px;
-            border-radius: 30px;
+        .badge-total {
+            background: #e4eaf2;
+            padding: 5px 14px;
+            border-radius: 60px;
             font-size: 0.7rem;
             font-weight: 700;
             color: #1e2f5e;
         }
-        .action-icons {
+        .action-btns {
             display: flex;
             gap: 12px;
         }
-        .icon-btn {
+        .icon-action {
             background: white;
-            border: 1px solid #cbd5e1;
-            padding: 6px 16px;
+            border: 1px solid #cbdcec;
+            padding: 7px 18px;
             border-radius: 40px;
             font-size: 0.75rem;
             font-weight: 600;
@@ -174,62 +179,63 @@
             gap: 6px;
             transition: 0.2s;
         }
-        .icon-btn:active { transform: scale(0.96); }
+        .icon-action:active { transform: scale(0.96); background: #f8fafc; }
 
-        /* SEARCH BAR */
-        .search-container {
-            background: white;
-            border-radius: 28px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
+        /* SEARCH ZONE */
+        .search-zone {
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 14px 18px;
+            margin-bottom: 22px;
             display: flex;
             flex-wrap: wrap;
             align-items: flex-end;
-            gap: 12px;
-            border: 1px solid #e0edf5;
+            gap: 14px;
+            border: 1px solid #e2edf5;
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
-        .search-box {
+        .search-group {
             flex: 2;
             min-width: 150px;
         }
-        .search-box label {
+        .search-group label {
             font-size: 0.65rem;
-            font-weight: 600;
-            color: #4b5563;
-            margin-bottom: 3px;
+            font-weight: 700;
+            color: #3b4e6e;
+            margin-bottom: 4px;
             display: block;
         }
-        .search-box input, .search-box select {
+        .search-group input, .search-group select {
             width: 100%;
-            padding: 8px 12px;
-            border-radius: 40px;
-            border: 1px solid #cbd5e6;
+            padding: 8px 14px;
+            border-radius: 32px;
+            border: 1px solid #cbdcec;
             background: #fefefe;
             font-size: 0.8rem;
         }
-        .reset-filter {
+        .btn-reset-filter {
             background: none;
-            border: 1px solid #cbd5e1;
-            padding: 8px 20px;
+            border: 1px solid #cbdcec;
+            padding: 8px 24px;
             border-radius: 40px;
+            font-weight: 600;
             font-size: 0.75rem;
-            font-weight: 500;
             cursor: pointer;
             margin-bottom: 0;
             white-space: nowrap;
+            transition: 0.2s;
         }
-        .info-result {
+        .info-filter {
             font-size: 0.7rem;
-            background: #eef2ff;
+            background: #eef2fc;
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 12px;
+            padding: 5px 14px;
+            border-radius: 40px;
+            margin-bottom: 14px;
         }
 
-        /* TABLE WRAPPER SCROLL */
-        .table-wrap {
+        /* TABLE WRAPPER */
+        .table-scroll {
             overflow-x: auto;
             border-radius: 24px;
             -webkit-overflow-scrolling: touch;
@@ -239,21 +245,22 @@
             border-collapse: collapse;
             background: white;
             border-radius: 24px;
-            min-width: 780px;
+            min-width: 820px;
         }
         th {
             background: #eef2fa;
-            padding: 12px 8px;
+            padding: 14px 10px;
             font-size: 0.7rem;
-            font-weight: 700;
-            color: #2c3e66;
+            font-weight: 800;
+            color: #1e3a5f;
             text-transform: uppercase;
+            letter-spacing: 0.4px;
         }
         td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #eef2f5;
+            padding: 12px 10px;
+            border-bottom: 1px solid #eef2f8;
             font-size: 0.8rem;
-            color: #1f2a3e;
+            color: #1f2a44;
         }
         .delete-cell {
             text-align: center;
@@ -263,109 +270,115 @@
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
-            color: #b91c1c;
-            padding: 4px 8px;
+            color: #bc1c2e;
+            padding: 5px 8px;
             border-radius: 30px;
+            transition: 0.1s;
         }
+        .delete-btn:active { background: #ffe3e3; transform: scale(0.95);}
         .empty-row td {
             text-align: center;
-            padding: 32px;
-            color: #6b7280;
+            padding: 36px;
+            color: #6c7a91;
+            font-style: italic;
         }
         footer {
             font-size: 0.6rem;
             text-align: center;
-            padding: 12px 16px;
+            padding: 12px 20px;
             background: white;
-            color: #6c7a91;
-            border-top: 1px solid #e9eff5;
+            color: #6f7c98;
+            border-top: 1px solid #ecf3fa;
         }
 
-        /* ========= ANDROID PORTRAIT ========= */
+        /* ========= ANDROID PORTRAIT (max-width: 600px) ========= */
         @media (max-width: 600px) {
             body { padding: 8px; }
-            .app-card { border-radius: 24px; }
-            .header { padding: 14px 16px; }
-            .header h1 { font-size: 1.3rem; }
-            .header p { font-size: 0.7rem; }
-            .form-section { padding: 14px 14px 8px; }
-            .form-grid { flex-direction: column; gap: 10px; }
-            .input-group { min-width: 100%; }
-            .btn-group { flex-direction: column; gap: 8px; }
-            .record-area { padding: 14px 12px 16px; }
-            .toolbar-row { flex-direction: column; align-items: stretch; }
-            .action-icons { justify-content: flex-end; }
-            .search-container { flex-direction: column; align-items: stretch; border-radius: 24px; padding: 12px; }
-            .reset-filter { align-self: flex-start; margin-top: 4px; }
-            th, td { padding: 8px 6px; font-size: 0.7rem; }
+            .app-container { border-radius: 28px; }
+            .app-header { padding: 14px 16px; }
+            .app-header h1 { font-size: 1.25rem; gap: 6px; }
+            .app-header h1:before { font-size: 1.4rem; }
+            .app-header p { font-size: 0.65rem; display: none; }
+            .form-wrapper { padding: 14px 14px 10px; }
+            .grid-2cols { flex-direction: column; gap: 12px; margin-bottom: 12px; }
+            .input-field { min-width: 100%; }
+            .btn-row { flex-direction: column; gap: 10px; }
+            .record-panel { padding: 14px 12px 18px; }
+            .toolbar-flex { flex-direction: column; align-items: stretch; gap: 10px; }
+            .action-btns { justify-content: flex-end; }
+            .search-zone { flex-direction: column; align-items: stretch; border-radius: 24px; padding: 12px; gap: 10px; }
+            .btn-reset-filter { align-self: flex-start; }
+            th, td { padding: 9px 6px; font-size: 0.7rem; }
+            .badge-total { font-size: 0.6rem; padding: 3px 10px; }
         }
 
-        /* ========= ANDROID LANDSCAPE (tinggi terbatas) ========= */
-        @media (max-height: 550px) and (orientation: landscape) {
+        /* ========= ANDROID LANDSCAPE (max-height: 550px) & orientation landscape ========= */
+        @media (max-height: 560px) and (orientation: landscape) {
             body { padding: 6px; }
-            .header { padding: 8px 16px; }
-            .header h1 { font-size: 1.1rem; gap: 6px; }
-            .header p { display: none; }
-            .form-section { padding: 8px 16px 4px; }
-            .form-grid { gap: 8px; margin-bottom: 6px; }
-            .input-group input, .input-group select { padding: 6px 10px; font-size: 0.75rem; }
-            .input-group label { font-size: 0.65rem; }
+            .app-header { padding: 8px 18px; }
+            .app-header h1 { font-size: 1rem; gap: 6px; }
+            .app-header p { display: none; }
+            .form-wrapper { padding: 8px 16px 6px; }
+            .grid-2cols { gap: 8px; margin-bottom: 6px; }
+            .input-field input, .input-field select { padding: 6px 10px; font-size: 0.7rem; }
+            .input-field label { font-size: 0.6rem; }
             .btn { padding: 5px 12px; font-size: 0.7rem; }
-            .record-area { padding: 8px 12px 12px; }
-            .toolbar-row { margin-bottom: 8px; }
-            .title-badge h3 { font-size: 0.95rem; }
-            .badge { font-size: 0.6rem; padding: 2px 8px; }
-            .icon-btn { padding: 4px 12px; font-size: 0.65rem; }
-            .search-container { padding: 8px 12px; margin-bottom: 10px; gap: 8px; }
-            .search-box input, .search-box select { padding: 5px 8px; font-size: 0.7rem; }
-            .reset-filter { padding: 5px 14px; font-size: 0.65rem; }
-            .table-wrap { max-height: 210px; overflow-y: auto; }
+            .record-panel { padding: 8px 12px 12px; }
+            .toolbar-flex { margin-bottom: 8px; }
+            .title-count h3 { font-size: 0.9rem; }
+            .badge-total { font-size: 0.55rem; padding: 2px 8px; }
+            .icon-action { padding: 4px 12px; font-size: 0.65rem; }
+            .search-zone { padding: 8px 12px; margin-bottom: 10px; gap: 8px; }
+            .search-group input, .search-group select { padding: 5px 10px; font-size: 0.7rem; }
+            .btn-reset-filter { padding: 5px 16px; font-size: 0.65rem; }
+            .table-scroll { max-height: 210px; overflow-y: auto; }
             th, td { padding: 5px 6px; font-size: 0.65rem; }
-            footer { padding: 6px 12px; font-size: 0.55rem; }
             .delete-btn { font-size: 1rem; }
+            footer { padding: 6px 12px; font-size: 0.55rem; }
         }
 
-        /* Tablet / bentang lebar landscape */
-        @media (min-width: 700px) and (max-height: 500px) {
-            .table-wrap { max-height: 240px; overflow-y: auto; }
+        /* layar lebar landscape + tinggi sedang */
+        @media (min-width: 700px) and (max-height: 580px) {
+            .table-scroll { max-height: 250px; overflow-y: auto; }
+            .form-wrapper { padding: 10px 20px 6px; }
         }
 
         @media print {
-            body { background: white; padding: 0; }
-            .app-card { box-shadow: none; border-radius: 0; }
-            .form-section, .btn-group, .search-container, .action-icons, .delete-btn, footer, .reset-filter, .header p {
-                display: none;
+            body { background: white; padding: 0; margin: 0; }
+            .app-container { box-shadow: none; border-radius: 0; }
+            .form-wrapper, .btn-row, .search-zone, .action-btns, .delete-btn, footer, .app-header p, .btn-reset-filter {
+                display: none !important;
             }
-            .record-area { padding: 0; }
-            table { min-width: auto; border: 1px solid #ccc; }
-            th, td { border: 1px solid #aaa; }
+            .record-panel { padding: 0; }
+            table { min-width: auto; border: 1px solid #aaa; }
+            th, td { border: 1px solid #ccc; }
         }
     </style>
 </head>
 <body>
-<div class="app-card">
-    <div class="header">
-        <h1>Input Barang Masuk</h1>
-        <p>Manajemen Supplier · Pencarian Nama, Supplier & Kategori · Mobile Ready</p>
+<div class="app-container">
+    <div class="app-header">
+        <h1>Manajemen Barang Masuk</h1>
+        <p>Data Supplier + Filter Nama, Supplier & Kategori • Optimasi Android</p>
     </div>
 
-    <div class="form-section">
+    <div class="form-wrapper">
         <form id="itemForm">
-            <div class="form-grid">
-                <div class="input-group">
+            <div class="grid-2cols">
+                <div class="input-field">
                     <label>🏢 Nama Supplier</label>
-                    <input type="text" id="supplierName" placeholder="PT. Sumber Jaya" required>
+                    <input type="text" id="supplierName" placeholder="PT. Maju Jaya" required>
                 </div>
-                <div class="input-group">
+                <div class="input-field">
                     <label>📦 Nama Barang</label>
-                    <input type="text" id="productName" placeholder="Kertas / Box Display" required>
+                    <input type="text" id="productName" placeholder="Kertas A4 / Box Display" required>
                 </div>
             </div>
-            <div class="form-grid">
-                <div class="input-group">
+            <div class="grid-2cols">
+                <div class="input-field">
                     <label>📂 Kategori</label>
                     <select id="category" required>
-                        <option value="" disabled selected>Pilih kategori</option>
+                        <option value="" disabled selected>Pilih Kategori</option>
                         <option value="Booklet 1 1/4">Booklet 1 1/4</option>
                         <option value="Booklet 1 1/4 tips">Booklet 1 1/4 tips</option>
                         <option value="Booklet Kss">Booklet Kss</option>
@@ -379,57 +392,57 @@
                         <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
-                <div class="input-group">
+                <div class="input-field">
                     <label>🔢 Jumlah</label>
-                    <input type="number" id="qty" placeholder="Jumlah" min="1" required>
+                    <input type="number" id="quantity" placeholder="Jumlah" min="1" required>
                 </div>
-                <div class="input-group">
+                <div class="input-field">
                     <label>📏 Satuan</label>
-                    <input type="text" id="unit" placeholder="pcs, box, kg" required>
+                    <input type="text" id="unit" placeholder="pcs / box / kg" required>
                 </div>
             </div>
-            <div class="form-grid">
-                <div class="input-group">
+            <div class="grid-2cols">
+                <div class="input-field">
                     <label>📅 Tanggal Masuk</label>
                     <input type="date" id="entryDate" required>
                 </div>
-                <div class="input-group">
+                <div class="input-field">
                     <label>📝 Catatan / PO</label>
-                    <input type="text" id="notes" placeholder="No. PO / Invoice">
+                    <input type="text" id="notes" placeholder="No Invoice / PO">
                 </div>
             </div>
-            <div class="btn-group">
+            <div class="btn-row">
                 <button type="submit" class="btn btn-primary">➕ Tambah Barang</button>
                 <button type="button" id="resetFormBtn" class="btn btn-secondary">🔄 Reset Form</button>
             </div>
         </form>
     </div>
 
-    <div class="record-area">
-        <div class="toolbar-row">
-            <div class="title-badge">
-                <h3>📋 Log Penerimaan</h3>
-                <span class="badge" id="totalCountBadge">0 item</span>
+    <div class="record-panel">
+        <div class="toolbar-flex">
+            <div class="title-count">
+                <h3>📋 Daftar Penerimaan</h3>
+                <span class="badge-total" id="totalItemBadge">0 item</span>
             </div>
-            <div class="action-icons">
-                <button id="printAction" class="icon-btn">🖨️ Print</button>
-                <button id="exportCsv" class="icon-btn">📎 CSV</button>
+            <div class="action-btns">
+                <button id="printTable" class="icon-action">🖨️ Print</button>
+                <button id="exportCSV" class="icon-action">📎 Ekspor CSV</button>
             </div>
         </div>
 
-        <!-- SEARCH + FILTER -->
-        <div class="search-container">
-            <div class="search-box">
-                <label>🔍 Nama Barang</label>
-                <input type="text" id="searchProduct" placeholder="Cari barang...">
+        <!-- filter panel -->
+        <div class="search-zone">
+            <div class="search-group">
+                <label>🔍 Cari Nama Barang</label>
+                <input type="text" id="searchProductName" placeholder="Nama barang ...">
             </div>
-            <div class="search-box">
-                <label>🏭 Supplier</label>
-                <input type="text" id="searchSupplierField" placeholder="Cari supplier...">
+            <div class="search-group">
+                <label>🏭 Cari Supplier</label>
+                <input type="text" id="searchSupplierName" placeholder="Supplier ...">
             </div>
-            <div class="search-box">
-                <label>📂 Kategori</label>
-                <select id="searchCategory">
+            <div class="search-group">
+                <label>📂 Filter Kategori</label>
+                <select id="filterCategory">
                     <option value="">Semua Kategori</option>
                     <option value="Booklet 1 1/4">Booklet 1 1/4</option>
                     <option value="Booklet 1 1/4 tips">Booklet 1 1/4 tips</option>
@@ -444,81 +457,81 @@
                     <option value="Lainnya">Lainnya</option>
                 </select>
             </div>
-            <button id="clearFiltersBtn" class="reset-filter">✖️ Reset Filter</button>
+            <button id="clearFilters" class="btn-reset-filter">✖️ Reset Filter</button>
         </div>
-        <div id="filterInfo" class="info-result"></div>
+        <div id="filterResultsInfo" class="info-filter"></div>
 
-        <div class="table-wrap">
+        <div class="table-scroll">
             <table id="dataTable">
                 <thead>
-                    <tr><th>Supplier</th><th>Nama Barang</th><th>Kategori</th><th>Jumlah</th><th>Unit</th><th>Tgl Masuk</th><th>Catatan</th><th style="width:50px">Aksi</th></tr>
+                    <tr><th>Supplier</th><th>Nama Barang</th><th>Kategori</th><th>Jumlah</th><th>Satuan</th><th>Tgl Masuk</th><th>Catatan</th><th>Aksi</th></tr>
                 </thead>
                 <tbody id="tableBody">
-                    <tr class="empty-row"><td colspan="8">Belum ada data. Silakan tambah barang masuk.</td></tr>
+                    <tr class="empty-row"><td colspan="8">✨ Belum ada data, silakan tambah barang masuk.✨</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <footer>⚡ Data tersimpan di LocalStorage | Cepat | Responsif Portrait & Landscape Android</footer>
+    <footer>📱 Responsif Android (Portrait & Landscape) · Data tersimpan di LocalStorage · Real-time Filter</footer>
 </div>
 
 <script>
-    // ======================= DATA STORE =======================
-    let masterItems = [];      // semua data asli
-    let filteredItems = [];    // hasil filter
+    // ----- DATA GLOBAL -----
+    let allItems = [];           // seluruh data
+    let filteredList = [];       // hasil filter
 
     // DOM Elements
     const form = document.getElementById('itemForm');
-    const supplierInput = document.getElementById('supplierName');
-    const productInput = document.getElementById('productName');
+    const supplierInp = document.getElementById('supplierName');
+    const productInp = document.getElementById('productName');
     const categorySelect = document.getElementById('category');
-    const qtyInput = document.getElementById('qty');
-    const unitInput = document.getElementById('unit');
-    const dateInput = document.getElementById('entryDate');
-    const notesInput = document.getElementById('notes');
-    const resetButton = document.getElementById('resetFormBtn');
-    const tbody = document.getElementById('tableBody');
-    const totalBadge = document.getElementById('totalCountBadge');
-    const printBtn = document.getElementById('printAction');
-    const exportBtn = document.getElementById('exportCsv');
-    // filter fields
-    const searchProduct = document.getElementById('searchProduct');
-    const searchSupplierField = document.getElementById('searchSupplierField');
-    const searchCategory = document.getElementById('searchCategory');
-    const clearFilterBtn = document.getElementById('clearFiltersBtn');
-    const filterInfoSpan = document.getElementById('filterInfo');
+    const qtyInp = document.getElementById('quantity');
+    const unitInp = document.getElementById('unit');
+    const dateInp = document.getElementById('entryDate');
+    const notesInp = document.getElementById('notes');
+    const resetFormBtn = document.getElementById('resetFormBtn');
+    const tbodyEl = document.getElementById('tableBody');
+    const totalBadgeSpan = document.getElementById('totalItemBadge');
+    const printBtnEl = document.getElementById('printTable');
+    const exportBtnEl = document.getElementById('exportCSV');
 
-    // helper: set default tanggal
+    // filter elements
+    const searchProductField = document.getElementById('searchProductName');
+    const searchSupplierField = document.getElementById('searchSupplierName');
+    const filterCategorySelect = document.getElementById('filterCategory');
+    const clearFilterBtn = document.getElementById('clearFilters');
+    const filterInfoSpan = document.getElementById('filterResultsInfo');
+
+    // Helper: set default date today
     function setDefaultDate() {
-        if (!dateInput.value) {
+        if (!dateInp.value) {
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
-            dateInput.value = `${yyyy}-${mm}-${dd}`;
+            dateInp.value = `${yyyy}-${mm}-${dd}`;
         }
     }
 
-    // load data from localStorage
-    function loadData() {
-        const stored = localStorage.getItem('supplier_goods_app');
+    // Load from localStorage
+    function loadDataFromStorage() {
+        const stored = localStorage.getItem('inventory_supplier_app');
         if (stored) {
             try {
-                masterItems = JSON.parse(stored);
-                if (!Array.isArray(masterItems)) masterItems = [];
-            } catch(e) { masterItems = []; }
+                allItems = JSON.parse(stored);
+                if (!Array.isArray(allItems)) allItems = [];
+            } catch(e) { allItems = []; }
         } else {
-            masterItems = [];
+            allItems = [];
         }
-        applyFiltersAndRender();
+        applyFilterAndRender();
     }
 
-    function saveToLocal() {
-        localStorage.setItem('supplier_goods_app', JSON.stringify(masterItems));
+    function saveToStorage() {
+        localStorage.setItem('inventory_supplier_app', JSON.stringify(allItems));
     }
 
-    // escape HTML
-    function escapeHTML(str) {
+    function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
@@ -528,88 +541,80 @@
         });
     }
 
-    // format tanggal tampilan
-    function formatDateYMD(dateStr) {
+    function formatDateForDisplay(dateStr) {
         if (!dateStr) return '-';
-        const parts = dateStr.split('-');
+        let parts = dateStr.split('-');
         if (parts.length !== 3) return dateStr;
         return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
-    // FILTER + RENDER utama
-    function applyFiltersAndRender() {
-        const keywordProduct = searchProduct.value.trim().toLowerCase();
+    // Filter + Render utama
+    function applyFilterAndRender() {
+        const keywordProduct = searchProductField.value.trim().toLowerCase();
         const keywordSupplier = searchSupplierField.value.trim().toLowerCase();
-        const selectedCat = searchCategory.value;
+        const selectedCat = filterCategorySelect.value;
 
-        filteredItems = masterItems.filter(item => {
-            let matchProduct = true;
-            let matchSupplier = true;
-            let matchCat = true;
+        filteredList = allItems.filter(item => {
+            let matchProduct = true, matchSupplier = true, matchCat = true;
             if (keywordProduct) matchProduct = (item.nama || "").toLowerCase().includes(keywordProduct);
             if (keywordSupplier) matchSupplier = (item.supplier || "").toLowerCase().includes(keywordSupplier);
             if (selectedCat && selectedCat !== "") matchCat = (item.kategori || "") === selectedCat;
             return matchProduct && matchSupplier && matchCat;
         });
 
-        // info text
-        const totalAll = masterItems.length;
-        const showing = filteredItems.length;
+        const totalAll = allItems.length;
+        const showing = filteredList.length;
         if (keywordProduct || keywordSupplier || (selectedCat && selectedCat !== "")) {
             filterInfoSpan.textContent = `🔎 Menampilkan ${showing} dari ${totalAll} item`;
         } else {
             filterInfoSpan.textContent = `📋 Total semua: ${totalAll} item`;
         }
-        totalBadge.textContent = (showing === totalAll) ? `${totalAll} item` : `${showing} / ${totalAll}`;
-
-        renderTable(filteredItems);
+        totalBadgeSpan.textContent = (showing === totalAll) ? `${totalAll} item` : `${showing} / ${totalAll}`;
+        renderTable(filteredList);
     }
 
-    // render tabel
     function renderTable(items) {
-        if (!tbody) return;
+        if (!tbodyEl) return;
         if (!items.length) {
-            tbody.innerHTML = `<tr class="empty-row"><td colspan="8">📭 Tidak ada data sesuai filter / silakan tambah barang.</td></tr>`;
+            tbodyEl.innerHTML = `<tr class="empty-row"><td colspan="8">📭 Tidak ada data / tidak ditemukan berdasarkan filter.📭</td></tr>`;
             return;
         }
-        let html = '';
-        items.forEach(item => {
-            html += `
+        let rows = '';
+        for (let item of items) {
+            rows += `
                 <tr data-id="${item.id}">
-                    <td>${escapeHTML(item.supplier)}</td>
-                    <td>${escapeHTML(item.nama)}</td>
-                    <td>${escapeHTML(item.kategori)}</td>
-                    <td>${escapeHTML(String(item.jumlah))}</td>
-                    <td>${escapeHTML(item.unit)}</td>
-                    <td>${escapeHTML(formatDateYMD(item.tanggal))}</td>
-                    <td>${escapeHTML(item.catatan || '-')}</td>
-                    <td class="delete-cell"><button class="delete-btn" data-id="${item.id}" title="Hapus">🗑️</button></td>
+                    <td>${escapeHtml(item.supplier)}</td>
+                    <td>${escapeHtml(item.nama)}</td>
+                    <td>${escapeHtml(item.kategori)}</td>
+                    <td>${escapeHtml(String(item.jumlah))}</td>
+                    <td>${escapeHtml(item.unit)}</td>
+                    <td>${escapeHtml(formatDateForDisplay(item.tanggal))}</td>
+                    <td>${escapeHtml(item.catatan || '-')}</td>
+                    <td class="delete-cell"><button class="delete-btn" data-id="${item.id}" aria-label="Hapus">🗑️</button></td>
                 </tr>
             `;
-        });
-        tbody.innerHTML = html;
-        // attach delete events
+        }
+        tbodyEl.innerHTML = rows;
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const id = btn.getAttribute('data-id');
-                if (id) deleteById(id);
+                if (id) deleteItemById(id);
             });
         });
     }
 
-    function deleteById(id) {
-        const newArr = masterItems.filter(it => String(it.id) !== String(id));
-        if (newArr.length !== masterItems.length) {
-            masterItems = newArr;
-            saveToLocal();
-            applyFiltersAndRender();
+    function deleteItemById(id) {
+        const updated = allItems.filter(it => String(it.id) !== String(id));
+        if (updated.length !== allItems.length) {
+            allItems = updated;
+            saveToStorage();
+            applyFilterAndRender();
         }
     }
 
-    // tambah item baru
     function addNewItem(data) {
-        const newId = Date.now() + '-' + Math.random().toString(36).substring(2, 10);
+        const newId = Date.now() + '-' + Math.random().toString(36).substring(2, 12);
         const newEntry = {
             id: newId,
             supplier: data.supplier,
@@ -620,35 +625,35 @@
             tanggal: data.tanggal,
             catatan: data.catatan || ''
         };
-        masterItems.unshift(newEntry);
-        saveToLocal();
-        applyFiltersAndRender();
+        allItems.unshift(newEntry);
+        saveToStorage();
+        applyFilterAndRender();
     }
 
-    // reset form
     function resetFormFields() {
         form.reset();
         setDefaultDate();
         categorySelect.value = "";
-        supplierInput.focus();
+        supplierInp.focus();
     }
 
-    // handle submit
+    // Submit handler
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const supplier = supplierInput.value.trim();
-        const nama = productInput.value.trim();
-        const kategori = categorySelect.value;
-        const jumlahRaw = qtyInput.value.trim();
-        const unit = unitInput.value.trim();
-        const tanggal = dateInput.value;
-        const catatan = notesInput.value.trim();
 
-        if (!supplier) { alert("Supplier harus diisi!"); supplierInput.focus(); return; }
-        if (!nama) { alert("Nama barang harus diisi!"); productInput.focus(); return; }
+        const supplier = supplierInp.value.trim();
+        const nama = productInp.value.trim();
+        const kategori = categorySelect.value;
+        const jumlahRaw = qtyInp.value.trim();
+        const unit = unitInp.value.trim();
+        const tanggal = dateInp.value;
+        const catatan = notesInp.value.trim();
+
+        if (!supplier) { alert("Nama Supplier wajib diisi!"); supplierInp.focus(); return; }
+        if (!nama) { alert("Nama barang harus diisi!"); productInp.focus(); return; }
         if (!kategori) { alert("Pilih kategori!"); return; }
-        if (!jumlahRaw || parseInt(jumlahRaw) <= 0) { alert("Jumlah harus >0"); qtyInput.focus(); return; }
-        if (!unit) { alert("Satuan harus diisi!"); unitInput.focus(); return; }
+        if (!jumlahRaw || parseInt(jumlahRaw) <= 0) { alert("Jumlah harus lebih dari 0"); qtyInp.focus(); return; }
+        if (!unit) { alert("Satuan wajib diisi!"); unitInp.focus(); return; }
         if (!tanggal) { alert("Tanggal masuk wajib"); return; }
 
         addNewItem({
@@ -663,45 +668,41 @@
         resetFormFields();
     });
 
-    resetButton.addEventListener('click', () => resetFormFields());
+    resetFormBtn.addEventListener('click', () => resetFormFields());
 
-    // event filter
-    searchProduct.addEventListener('input', () => applyFiltersAndRender());
-    searchSupplierField.addEventListener('input', () => applyFiltersAndRender());
-    searchCategory.addEventListener('change', () => applyFiltersAndRender());
+    // Filter events
+    searchProductField.addEventListener('input', () => applyFilterAndRender());
+    searchSupplierField.addEventListener('input', () => applyFilterAndRender());
+    filterCategorySelect.addEventListener('change', () => applyFilterAndRender());
     clearFilterBtn.addEventListener('click', () => {
-        searchProduct.value = '';
+        searchProductField.value = '';
         searchSupplierField.value = '';
-        searchCategory.value = '';
-        applyFiltersAndRender();
+        filterCategorySelect.value = '';
+        applyFilterAndRender();
     });
 
-    // PRINT (hilangkan kolom aksi)
-    printBtn.addEventListener('click', () => {
+    // Print (hilangkan kolom aksi)
+    printBtnEl.addEventListener('click', () => {
         const originalTable = document.getElementById('dataTable');
         const cloneTable = originalTable.cloneNode(true);
-        // hapus kolom aksi (kolom terakhir) di header & body
-        const thead = cloneTable.querySelector('thead tr');
-        if (thead && thead.children.length >= 8) {
-            thead.children[7].textContent = '';
-        }
-        const bodyRows = cloneTable.querySelectorAll('tbody tr');
-        bodyRows.forEach(row => {
+        const theadRow = cloneTable.querySelector('thead tr');
+        if (theadRow && theadRow.children.length >= 8) theadRow.children[7].textContent = '';
+        cloneTable.querySelectorAll('tbody tr').forEach(row => {
             const lastCell = row.querySelector('td:last-child');
             if (lastCell) lastCell.textContent = '';
         });
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
-            <html><head><title>Laporan Barang Masuk</title>
+            <html><head><title>Laporan Barang Masuk Supplier</title>
             <style>
-                body { font-family: sans-serif; margin: 24px; }
+                body { font-family: system-ui, sans-serif; margin: 20px; }
                 table { width: 100%; border-collapse: collapse; }
                 th, td { border: 1px solid #aaa; padding: 8px; text-align: left; }
-                th { background: #f1f5f9; }
-                h2 { color: #1e2f5e; }
+                th { background: #eef2fa; }
+                h2 { color: #1e3a5f; }
             </style>
             </head><body>
-            <h2>📦 Laporan Penerimaan Barang dari Supplier</h2>
+            <h2>📦 Laporan Penerimaan Barang (Supplier)</h2>
             ${cloneTable.outerHTML}
             <p><small>Dicetak: ${new Date().toLocaleString()}</small></p>
             </body></html>
@@ -710,25 +711,24 @@
         printWindow.print();
     });
 
-    // EXPORT CSV berdasarkan data yang tampil (filter aktif)
-    exportBtn.addEventListener('click', () => {
-        const dataToExport = filteredItems.length ? filteredItems : masterItems;
+    // Export CSV berdasarkan data yang sedang difilter
+    exportBtnEl.addEventListener('click', () => {
+        const dataToExport = filteredList.length ? filteredList : allItems;
         if (!dataToExport.length) {
             alert("Tidak ada data untuk diekspor.");
             return;
         }
         const headers = ['Supplier', 'Nama Barang', 'Kategori', 'Jumlah', 'Satuan', 'Tanggal Masuk', 'Catatan'];
-        const csvRows = [];
-        csvRows.push(headers.join(','));
-        for (const item of dataToExport) {
+        const csvRows = [headers.join(',')];
+        for (const it of dataToExport) {
             const row = [
-                `"${(item.supplier || '').replace(/"/g, '""')}"`,
-                `"${(item.nama || '').replace(/"/g, '""')}"`,
-                `"${(item.kategori || '').replace(/"/g, '""')}"`,
-                item.jumlah,
-                `"${(item.unit || '').replace(/"/g, '""')}"`,
-                `"${item.tanggal || ''}"`,
-                `"${(item.catatan || '').replace(/"/g, '""')}"`
+                `"${(it.supplier || '').replace(/"/g, '""')}"`,
+                `"${(it.nama || '').replace(/"/g, '""')}"`,
+                `"${(it.kategori || '').replace(/"/g, '""')}"`,
+                it.jumlah,
+                `"${(it.unit || '').replace(/"/g, '""')}"`,
+                `"${it.tanggal || ''}"`,
+                `"${(it.catatan || '').replace(/"/g, '""')}"`
             ];
             csvRows.push(row.join(','));
         }
@@ -745,7 +745,7 @@
 
     // init
     setDefaultDate();
-    loadData();
+    loadDataFromStorage();
 </script>
 </body>
 </html>
