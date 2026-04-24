@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -292,7 +291,7 @@
         }
 
         /* ========= ANDROID PORTRAIT (max-width: 600px) ========= */
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             body { padding: 8px; }
             .app-container { border-radius: 28px; }
             .app-header { padding: 14px 16px; }
@@ -312,8 +311,8 @@
             .badge-total { font-size: 0.6rem; padding: 3px 10px; }
         }
 
-        /* ========= ANDROID LANDSCAPE (max-height: 550px) & orientation landscape ========= */
-        @media (max-height: 560px) and (orientation: landscape) {
+        /* ========= ANDROID LANDSCAPE (max-height: 900px) & orientation landscape ========= */
+        @media (max-height: 900px) and (orientation: landscape) {
             body { padding: 6px; }
             .app-header { padding: 8px 18px; }
             .app-header h1 { font-size: 1rem; gap: 6px; }
@@ -338,7 +337,7 @@
         }
 
         /* layar lebar landscape + tinggi sedang */
-        @media (min-width: 700px) and (max-height: 580px) {
+        @media (min-width: 700px) and (max-height: 900px) {
             .table-scroll { max-height: 250px; overflow-y: auto; }
             .form-wrapper { padding: 10px 20px 6px; }
         }
