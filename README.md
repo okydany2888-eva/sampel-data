@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Inventory Management - Mobile | Barang Masuk & Keluar</title>
+    <title>Inventory Management - Mobile | Barang Masuk & Keluar + Input Cepat</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts -->
@@ -10,245 +10,63 @@
     <!-- SheetJS (XLSX) -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background: #f1f5f9;
-            padding: 12px;
-            color: #0f172a;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .dashboard-header {
-            margin-bottom: 16px;
-        }
-        .dashboard-header h1 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e3c72, #2b3b6e);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .sub {
-            font-size: 0.7rem;
-            color: #475569;
-            margin-top: 4px;
-            padding-left: 8px;
-            border-left: 3px solid #3b82f6;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #f1f5f9; padding: 12px; color: #0f172a; }
+        .container { max-width: 100%; margin: 0 auto; }
+        .dashboard-header { margin-bottom: 16px; }
+        .dashboard-header h1 { font-size: 1.3rem; font-weight: 700; background: linear-gradient(135deg, #1e3c72, #2b3b6e); -webkit-background-clip: text; background-clip: text; color: transparent; display: flex; align-items: center; gap: 8px; }
+        .sub { font-size: 0.7rem; color: #475569; margin-top: 4px; padding-left: 8px; border-left: 3px solid #3b82f6; }
 
         /* KARTU INPUT */
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .input-card {
-            background: white;
-            border-radius: 20px;
-            padding: 14px 16px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
-        .input-card h3 {
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #0f3b5c;
-        }
-        .input-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: flex-end;
-        }
-        .input-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-            min-width: 100px;
-        }
-        .input-item label {
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: #334155;
-        }
-        .input-item input, .input-item select {
-            padding: 6px 8px;
-            border-radius: 12px;
-            border: 1px solid #cbd5e1;
-            background: white;
-            font-size: 0.75rem;
-        }
-        .btn-submit {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 4px;
-        }
-        .btn-submit-keluar {
-            background: #f59e0b;
-        }
+        .input-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+        .input-card { background: white; border-radius: 20px; padding: 14px 16px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .input-card h3 { font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; color: #0f3b5c; }
+        .input-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+        .input-item { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 100px; }
+        .input-item label { font-size: 0.6rem; font-weight: 600; color: #334155; }
+        .input-item input, .input-item select { padding: 6px 8px; border-radius: 12px; border: 1px solid #cbd5e1; background: white; font-size: 0.75rem; }
+        .btn-submit { background: #10b981; color: white; border: none; padding: 6px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; }
+        .btn-submit-keluar { background: #f59e0b; }
+        .btn-small-add { background: #e2e8f0; border: none; padding: 4px 10px; border-radius: 20px; font-size: 0.6rem; cursor: pointer; margin-left: 6px; color: #1e40af; }
 
         /* Dua Panel */
-        .two-panels {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .panel {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            width: 100%;
-        }
-        .panel-header {
-            padding: 12px 16px;
-            background: #fafcff;
-            border-bottom: 1px solid #eef2ff;
-        }
-        .panel-header h2 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #0f3b5c;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        /* Tombol manual disembunyikan */
-        .btn-add {
-            display: none;
-        }
-        .table-wrapper {
-            overflow-x: auto;
-            padding: 0 12px 12px 12px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.7rem;
-            min-width: 480px;
-        }
-        th, td {
-            padding: 8px 4px;
-            text-align: left;
-            border-bottom: 1px solid #e9eef3;
-        }
-        th {
-            background-color: #f8fafc;
-            font-weight: 600;
-        }
-        .action-icons i {
-            margin: 0 3px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
+        .two-panels { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+        .panel { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; width: 100%; }
+        .panel-header { padding: 12px 16px; background: #fafcff; border-bottom: 1px solid #eef2ff; }
+        .panel-header h2 { font-size: 1rem; font-weight: 700; color: #0f3b5c; display: flex; align-items: center; gap: 6px; }
+        .table-wrapper { overflow-x: auto; padding: 0 12px 12px 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 480px; }
+        th, td { padding: 8px 4px; text-align: left; border-bottom: 1px solid #e9eef3; }
+        th { background-color: #f8fafc; font-weight: 600; }
+        .action-icons i { margin: 0 3px; cursor: pointer; font-size: 0.85rem; }
         .fa-edit { color: #3b82f6; }
         .fa-trash-alt { color: #ef4444; }
 
-        /* REKAP SECTION */
-        .rekap-section {
-            background: white;
-            border-radius: 20px;
-            padding: 14px 16px;
-            border: 1px solid #e2e8f0;
-        }
-        .rekap-header {
-            margin-bottom: 12px;
-        }
-        .rekap-header h3 {
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 10px;
-        }
-        .rekap-search {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 40px;
-            margin-bottom: 10px;
-        }
-        .rekap-search input {
-            border: none;
-            background: transparent;
-            padding: 6px 0;
-            outline: none;
-            width: 100%;
-            font-size: 0.8rem;
-        }
-        .rekap-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-        .btn-excel, .btn-print {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            padding: 5px 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.65rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
+        /* REKAP SECTION - Disesuaikan */
+        .rekap-section { background: white; border-radius: 20px; padding: 14px 16px; border: 1px solid #e2e8f0; margin-top: 8px; }
+        .rekap-header { margin-bottom: 12px; }
+        .rekap-header h3 { font-size: 1rem; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+        .rekap-search { display: flex; gap: 8px; align-items: center; background: #f1f5f9; padding: 6px 12px; border-radius: 40px; margin-bottom: 10px; }
+        .rekap-search input { border: none; background: transparent; padding: 6px 0; outline: none; width: 100%; font-size: 0.8rem; }
+        .rekap-actions { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 12px; }
+        .btn-excel, .btn-print { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.65rem; display: inline-flex; align-items: center; gap: 4px; }
         .btn-excel { background: #e8f5e9; color: #2e7d32; }
         .btn-print { background: #e3f2fd; color: #1565c0; }
-        .badge { background: #eef2ff; padding: 3px 8px; border-radius: 30px; font-size: 0.6rem; }
-        .small-note {
-            font-size: 0.6rem;
-            color: #5b6e8c;
-            margin-top: 10px;
-            text-align: center;
-        }
-        button {
-            touch-action: manipulation;
-        }
-        @media print {
-            .input-container, .btn-excel, .btn-print, .rekap-actions, .action-icons {
-                display: none !important;
-            }
-        }
+        .badge { background: #eef2ff; padding: 3px 8px; border-radius: 30px; font-size: 0.6rem; display: inline-block; margin: 2px 0; }
+        .small-note { font-size: 0.6rem; color: #5b6e8c; margin-top: 10px; text-align: center; }
+        .rekap-card-item { background: #f8fafc; border-radius: 16px; padding: 12px; margin-bottom: 12px; border-left: 4px solid #3b82f6; }
+        .rekap-brand { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; }
+        .rekap-detail { font-size: 0.7rem; color: #334155; margin-top: 6px; }
+        .rekap-stok { font-weight: 800; font-size: 0.9rem; color: #0f3b5c; }
+        button { touch-action: manipulation; }
+        @media print { .input-container, .btn-excel, .btn-print, .rekap-actions, .action-icons { display: none !important; } }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="dashboard-header">
         <h1><i class="fas fa-boxes"></i> Inventory Management</h1>
-        <div class="sub">Barang Masuk Supplier & Stok Consumable</div>
+        <div class="sub">Barang Masuk Supplier & Stok Consumable | Input Cepat + Rekap Stok</div>
     </div>
 
     <!-- KARTU INPUT: Barang Masuk -->
@@ -257,11 +75,12 @@
             <h3><i class="fas fa-arrow-down" style="color:#10b981;"></i> + Barang Masuk (Supplier)</h3>
             <div class="input-row">
                 <div class="input-item"><label>Tanggal</label><input type="date" id="inputTanggalMasuk"></div>
-                <div class="input-item"><label>Brand</label><select id="inputBrandMasuk"><option value="">Pilih Brand</option></select></div>
-                <div class="input-item"><label>Nama Barang</label><select id="inputNamaBarangMasuk"><option value="">Pilih Barang</option></select></div>
+                <div class="input-item"><label>Brand <button type="button" class="btn-small-add" id="tambahBrandBtn">+ Baru</button></label><select id="inputBrandMasuk"><option value="">Pilih Brand</option></select></div>
+                <div class="input-item"><label>Nama Barang <button type="button" class="btn-small-add" id="tambahNamaBarangBtn">+ Baru</button></label><select id="inputNamaBarangMasuk"><option value="">Pilih Barang</option></select></div>
                 <div class="input-item"><label>Jumlah</label><input type="number" id="inputJumlahMasuk" value="1" min="1"></div>
-                <div class="input-item"><label>Satuan</label><select id="inputSatuanMasuk"><option value="">Pilih Satuan</option></select></div>
-                <div class="input-item"><label>Supplier</label><input type="text" id="inputSupplierMasuk" placeholder="Nama supplier"></div>
+                <div class="input-item"><label>Satuan <button type="button" class="btn-small-add" id="tambahSatuanBtn">+ Baru</button></label><select id="inputSatuanMasuk"><option value="">Pilih Satuan</option></select></div>
+                <div class="input-item"><label>Supplier <button type="button" class="btn-small-add" id="tambahSupplierBtn">+ Baru</button></label><input type="text" id="inputSupplierMasuk" placeholder="Nama supplier" list="supplierList"></div>
+                <datalist id="supplierList"></datalist>
                 <button class="btn-submit" id="btnSubmitMasuk"><i class="fas fa-plus-circle"></i> Tambah</button>
             </div>
         </div>
@@ -285,32 +104,20 @@
     <!-- Data Barang Masuk -->
     <div class="two-panels">
         <div class="panel">
-            <div class="panel-header">
-                <h2><i class="fas fa-truck"></i> Data Barang Masuk</h2>
-            </div>
+            <div class="panel-header"><h2><i class="fas fa-truck"></i> Data Barang Masuk</h2></div>
             <div class="table-wrapper">
-                <table id="tableMasuk">
-                    <thead><tr><th>Tanggal</th><th>Brand</th><th>Nama Barang</th><th>Supplier</th><th>Jml</th><th>Satuan</th><th>Aksi</th></tr></thead>
-                    <tbody id="tbodyMasuk"></tbody>
-                </table>
+                <table id="tableMasuk"><thead><tr><th>Tanggal</th><th>Brand</th><th>Nama Barang</th><th>Supplier</th><th>Jml</th><th>Satuan</th><th>Aksi</th></tr></thead><tbody id="tbodyMasuk"></tbody></table>
             </div>
         </div>
-
-        <!-- Data Stock Consumable -->
         <div class="panel">
-            <div class="panel-header">
-                <h2><i class="fas fa-clipboard-list"></i> Stock Consumable</h2>
-            </div>
+            <div class="panel-header"><h2><i class="fas fa-clipboard-list"></i> Stock Consumable</h2></div>
             <div class="table-wrapper">
-                <table id="tableKeluar">
-                    <thead><tr><th>Stok Masuk</th><th>Tgl Keluar</th><th>Brand</th><th>Nama Barang</th><th>Jml</th><th>Satuan</th><th>PIC</th><th>Aksi</th></tr></thead>
-                    <tbody id="tbodyKeluar"></tbody>
-                </table>
+                <table id="tableKeluar"><thead><tr><th>Stok Masuk</th><th>Tgl Keluar</th><th>Brand</th><th>Nama Barang</th><th>Jml</th><th>Satuan</th><th>PIC</th><th>Aksi</th></tr></thead><tbody id="tbodyKeluar"></tbody></table>
             </div>
         </div>
     </div>
 
-    <!-- REKAP STOK AKHIR -->
+    <!-- REKAP STOK AKHIR - Tampilan Kartu yang Disesuaikan -->
     <div class="rekap-section">
         <div class="rekap-header">
             <h3><i class="fas fa-chart-line"></i> Rekap Stok Akhir</h3>
@@ -324,7 +131,7 @@
                 <button class="btn-print" id="printRekapBtn"><i class="fas fa-print"></i> Cetak</button>
             </div>
         </div>
-        <div class="rekap-grid" id="rekapContainer"></div>
+        <div id="rekapContainer"></div>
         <div class="small-note">* Stok Akhir = Total Masuk - Total Keluar (berdasarkan Brand + Nama Barang)</div>
     </div>
 </div>
@@ -334,6 +141,7 @@
     let dataMasuk = [];
     let dataKeluar = [];
 
+    // Helper functions
     function getUniqueKey(brand, nama) { return `${brand}|${nama}`.toLowerCase(); }
     function getTotalMasuk(brand, nama) {
         return dataMasuk.filter(m => m.brand === brand && m.namaBarang === nama).reduce((s, m) => s + m.jumlah, 0);
@@ -348,32 +156,32 @@
         return Array.from(map.values());
     }
 
+    // Simpan & Muat
     function loadFromStorage() {
-        const storedMasuk = localStorage.getItem('inv_masuk_mobile');
-        const storedKeluar = localStorage.getItem('inv_keluar_mobile');
+        const storedMasuk = localStorage.getItem('inv_masuk_final_v2');
+        const storedKeluar = localStorage.getItem('inv_keluar_final_v2');
         if(storedMasuk) dataMasuk = JSON.parse(storedMasuk);
         else {
             dataMasuk = [
                 { id: 1, tanggal: '2025-04-01', brand: 'Sidney', namaBarang: 'Kertas A4', supplier: 'PT Maju Jaya', jumlah: 500, satuan: 'Rim' },
                 { id: 2, tanggal: '2025-04-02', brand: 'Epson', namaBarang: 'Tinta Hitam', supplier: 'Sumber Makmur', jumlah: 20, satuan: 'Botol' },
-                { id: 3, tanggal: '2025-04-10', brand: 'Snowman', namaBarang: 'Spidol', supplier: 'Alat Kantor', jumlah: 50, satuan: 'Pcs' },
-                { id: 4, tanggal: '2025-04-12', brand: 'Joyko', namaBarang: 'Stabilo', supplier: 'Stationery', jumlah: 30, satuan: 'Pcs' }
+                { id: 3, tanggal: '2025-04-10', brand: 'Snowman', namaBarang: 'Spidol', supplier: 'Alat Kantor', jumlah: 50, satuan: 'Pcs' }
             ];
         }
         if(storedKeluar) dataKeluar = JSON.parse(storedKeluar);
         else {
             dataKeluar = [
                 { id: 101, tanggalKeluar: '2025-04-05', brand: 'Sidney', barangKeluar: 'Kertas A4', jumlahKeluar: 120, satuan: 'Rim', namaPic: 'Andi' },
-                { id: 102, tanggalKeluar: '2025-04-08', brand: 'Epson', barangKeluar: 'Tinta Hitam', jumlahKeluar: 3, satuan: 'Botol', namaPic: 'Budi' },
-                { id: 103, tanggalKeluar: '2025-04-11', brand: 'Snowman', barangKeluar: 'Spidol', jumlahKeluar: 5, satuan: 'Pcs', namaPic: 'Citra' }
+                { id: 102, tanggalKeluar: '2025-04-08', brand: 'Epson', barangKeluar: 'Tinta Hitam', jumlahKeluar: 3, satuan: 'Botol', namaPic: 'Budi' }
             ];
         }
     }
     function saveToStorage() {
-        localStorage.setItem('inv_masuk_mobile', JSON.stringify(dataMasuk));
-        localStorage.setItem('inv_keluar_mobile', JSON.stringify(dataKeluar));
+        localStorage.setItem('inv_masuk_final_v2', JSON.stringify(dataMasuk));
+        localStorage.setItem('inv_keluar_final_v2', JSON.stringify(dataKeluar));
     }
 
+    // Update semua dropdown + datalist
     function updateAllDropdowns() {
         const items = getAllItems();
         const brandSet = new Set(items.map(i => i.brand));
@@ -403,26 +211,114 @@
         setupBrandBarang('inputBrandKeluar', 'inputNamaBarangKeluar');
         
         const allSatuan = [...new Set([...dataMasuk.map(m=>m.satuan), ...dataKeluar.map(k=>k.satuan)])];
-        const satuanMasuk = document.getElementById('inputSatuanMasuk');
-        const satuanKeluar = document.getElementById('inputSatuanKeluar');
-        const satuanOps = '<option value="">Pilih Satuan</option>' + allSatuan.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
-        if(satuanMasuk) satuanMasuk.innerHTML = satuanOps;
-        if(satuanKeluar) satuanKeluar.innerHTML = satuanOps;
+        [ 'inputSatuanMasuk', 'inputSatuanKeluar' ].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.innerHTML = '<option value="">Pilih Satuan</option>' + allSatuan.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+        });
+        
+        // Datalist supplier
+        const allSupplier = [...new Set(dataMasuk.map(m=>m.supplier))];
+        const datalist = document.getElementById('supplierList');
+        if(datalist) datalist.innerHTML = allSupplier.map(s=>`<option value="${escapeHtml(s)}">`).join('');
     }
 
+    // Fungsi tambah data baru untuk dropdown (brand, nama barang, satuan, supplier)
+    function tambahBrandBaru() { let val = prompt("Masukkan Brand baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageBrand(val); refreshAll(); alert(`Brand "${val}" ditambahkan.`); } }
+    function tambahNamaBarangBaru() { let val = prompt("Masukkan Nama Barang baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageNama(val); refreshAll(); alert(`Nama Barang "${val}" ditambahkan.`); } }
+    function tambahSatuanBaru() { let val = prompt("Masukkan Satuan baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageSatuan(val); refreshAll(); alert(`Satuan "${val}" ditambahkan.`); } }
+    function tambahSupplierBaru() { let val = prompt("Masukkan Supplier baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageSupplier(val); refreshAll(); alert(`Supplier "${val}" ditambahkan.`); } }
+    
+    // Untuk menyimpan entitas agar dropdown tetap sinkron, kita simpan melalui localStorage khusus master data
+    let masterBrands = new Set(); let masterNamaBarang = new Set(); let masterSatuan = new Set(); let masterSupplier = new Set();
+    function loadMasterData() {
+        const stored = localStorage.getItem('inv_master_data');
+        if(stored) {
+            const data = JSON.parse(stored);
+            masterBrands = new Set(data.brands || []);
+            masterNamaBarang = new Set(data.namaBarang || []);
+            masterSatuan = new Set(data.satuan || []);
+            masterSupplier = new Set(data.supplier || []);
+        } else {
+            // inisialisasi dari data yang ada
+            dataMasuk.forEach(m => { masterBrands.add(m.brand); masterNamaBarang.add(m.namaBarang); masterSatuan.add(m.satuan); masterSupplier.add(m.supplier); });
+            dataKeluar.forEach(k => { masterBrands.add(k.brand); masterNamaBarang.add(k.barangKeluar); masterSatuan.add(k.satuan); });
+        }
+        syncMasterToStorage();
+    }
+    function syncMasterToStorage() {
+        localStorage.setItem('inv_master_data', JSON.stringify({
+            brands: Array.from(masterBrands), namaBarang: Array.from(masterNamaBarang),
+            satuan: Array.from(masterSatuan), supplier: Array.from(masterSupplier)
+        }));
+    }
+    function tambahEntitasBaruKeStorageBrand(b) { masterBrands.add(b); syncMasterToStorage(); }
+    function tambahEntitasBaruKeStorageNama(n) { masterNamaBarang.add(n); syncMasterToStorage(); }
+    function tambahEntitasBaruKeStorageSatuan(s) { masterSatuan.add(s); syncMasterToStorage(); }
+    function tambahEntitasBaruKeStorageSupplier(s) { masterSupplier.add(s); syncMasterToStorage(); }
+    
+    // Integrasi pada refreshAll untuk memuat master dan dropdown yang lengkap
+    function integrateMasterToDropdowns() {
+        // Untuk input select brand & nama barang, kita perlu memastikan semua master ada di opsi.
+        // updateAllDropdowns sudah mengambil dari items (data transaksi), tetapi kita bisa tambahkan opsi tambahan dari master.
+        const items = getAllItems();
+        const brandSet = new Set(items.map(i => i.brand));
+        masterBrands.forEach(b => brandSet.add(b));
+        const barangByBrandFull = {};
+        items.forEach(i => { if(!barangByBrandFull[i.brand]) barangByBrandFull[i.brand] = new Set(); barangByBrandFull[i.brand].add(i.namaBarang); });
+        masterNamaBarang.forEach(n => { 
+            // tambahkan ke semua brand? tidak, lebih baik tetap per brand, tapi untuk input bebas kita beri opsi tambahan di akhir.
+        });
+        function setupBrandBarangFull(brandSelectId, barangSelectId) {
+            const brandSelect = document.getElementById(brandSelectId);
+            const barangSelect = document.getElementById(barangSelectId);
+            if(!brandSelect) return;
+            const currentBrand = brandSelect.value;
+            brandSelect.innerHTML = '<option value="">Pilih Brand</option>' + Array.from(brandSet).map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
+            if(currentBrand && brandSet.has(currentBrand)) brandSelect.value = currentBrand;
+            const updateBarangFull = () => {
+                const selectedBrand = brandSelect.value;
+                barangSelect.innerHTML = '<option value="">Pilih Barang</option>';
+                if(selectedBrand) {
+                    const existingBarang = barangByBrandFull[selectedBrand] || new Set();
+                    // tambahkan juga dari masterNamaBarang (opsional)
+                    const allOptions = new Set([...existingBarang]);
+                    barangSelect.innerHTML += Array.from(allOptions).map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+                }
+                // tambahkan opsi input manual jika tidak ada?
+            };
+            brandSelect.onchange = updateBarangFull;
+            updateBarangFull();
+        }
+        setupBrandBarangFull('inputBrandMasuk', 'inputNamaBarangMasuk');
+        setupBrandBarangFull('inputBrandKeluar', 'inputNamaBarangKeluar');
+        
+        const allSatuanFull = new Set([...dataMasuk.map(m=>m.satuan), ...dataKeluar.map(k=>k.satuan), ...masterSatuan]);
+        [ 'inputSatuanMasuk', 'inputSatuanKeluar' ].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.innerHTML = '<option value="">Pilih Satuan</option>' + Array.from(allSatuanFull).map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+        });
+        const allSupplierFull = new Set([...dataMasuk.map(m=>m.supplier), ...masterSupplier]);
+        const datalist = document.getElementById('supplierList');
+        if(datalist) datalist.innerHTML = Array.from(allSupplierFull).map(s=>`<option value="${escapeHtml(s)}">`).join('');
+    }
+    
+    // CRUD Barang Masuk & Keluar
     function addBarangMasuk() {
         const tanggal = document.getElementById('inputTanggalMasuk').value;
         if(!tanggal) { alert("Isi tanggal masuk"); return; }
-        const brand = document.getElementById('inputBrandMasuk').value;
-        if(!brand) { alert("Pilih Brand"); return; }
-        const namaBarang = document.getElementById('inputNamaBarangMasuk').value;
+        let brand = document.getElementById('inputBrandMasuk').value;
+        if(!brand) { alert("Pilih atau tambah brand terlebih dahulu"); return; }
+        let namaBarang = document.getElementById('inputNamaBarangMasuk').value;
         if(!namaBarang) { alert("Pilih Nama Barang"); return; }
         let jumlah = parseInt(document.getElementById('inputJumlahMasuk').value);
         if(isNaN(jumlah) || jumlah <= 0) jumlah = 1;
-        const satuan = document.getElementById('inputSatuanMasuk').value;
+        let satuan = document.getElementById('inputSatuanMasuk').value;
         if(!satuan) { alert("Pilih Satuan"); return; }
         let supplier = document.getElementById('inputSupplierMasuk').value.trim();
         if(!supplier) supplier = "Umum";
+        // Simpan master
+        masterBrands.add(brand); masterNamaBarang.add(namaBarang); masterSatuan.add(satuan); masterSupplier.add(supplier);
+        syncMasterToStorage();
         const newId = dataMasuk.length ? Math.max(...dataMasuk.map(m=>m.id)) + 1 : 1;
         dataMasuk.push({ id: newId, tanggal, brand, namaBarang, supplier, jumlah, satuan });
         refreshAll();
@@ -445,9 +341,7 @@
         let pic = document.getElementById('inputPicKeluar').value.trim();
         if(!pic) pic = "Admin";
         const stokTersedia = getTotalMasuk(brand, barangKeluar) - getTotalKeluar(brand, barangKeluar);
-        if(stokTersedia < jumlahKeluar) {
-            if(!confirm(`Stok saat ini hanya ${stokTersedia} ${satuan}. Tetap catat pengeluaran?`)) return;
-        }
+        if(stokTersedia < jumlahKeluar && !confirm(`Stok saat ini hanya ${stokTersedia} ${satuan}. Tetap catat pengeluaran?`)) return;
         const newId = dataKeluar.length ? Math.max(...dataKeluar.map(k=>k.id)) + 1 : 201;
         dataKeluar.push({ id: newId, tanggalKeluar, brand, barangKeluar, jumlahKeluar, satuan, namaPic: pic });
         refreshAll();
@@ -456,47 +350,44 @@
         document.getElementById('inputPicKeluar').value = "";
     }
 
+    // Render Tabel
     function renderTabelMasuk() {
         const tbody = document.getElementById('tbodyMasuk');
-        if(!dataMasuk.length) { tbody.innerHTML = '<tr><td colspan="7">Tidak ada data</td></tr>'; return; }
-        tbody.innerHTML = dataMasuk.map(m => `
-            <tr>
-                <td>${escapeHtml(m.tanggal)}</td><td><strong>${escapeHtml(m.brand)}</strong></td><td>${escapeHtml(m.namaBarang)}</td>
-                <td>${escapeHtml(m.supplier)}</td><td>${m.jumlah}</td><td>${escapeHtml(m.satuan)}</td>
-                <td class="action-icons"><i class="fas fa-edit" onclick="editMasuk(${m.id})"></i><i class="fas fa-trash-alt" onclick="hapusMasuk(${m.id})"></i></td>
-            </tr>
-        `).join('');
+        if(!dataMasuk.length) { tbody.innerHTML = '<tr><td colspan="7">Tidak ada数据</td></tr>'; return; }
+        tbody.innerHTML = dataMasuk.map(m => `<tr><td>${escapeHtml(m.tanggal)}</td><td><strong>${escapeHtml(m.brand)}</strong></td><td>${escapeHtml(m.namaBarang)}</td><td>${escapeHtml(m.supplier)}</td><td>${m.jumlah}</td><td>${escapeHtml(m.satuan)}</td><td class="action-icons"><i class="fas fa-edit" onclick="editMasuk(${m.id})"></i><i class="fas fa-trash-alt" onclick="hapusMasuk(${m.id})"></i></td></tr>`).join('');
     }
-
     function renderTabelKeluar() {
         const tbody = document.getElementById('tbodyKeluar');
-        if(!dataKeluar.length) { tbody.innerHTML = '<tr><td colspan="8">Tidak ada data</td></tr>'; return; }
-        tbody.innerHTML = dataKeluar.map(k => {
-            const stokMasuk = getTotalMasuk(k.brand, k.barangKeluar);
-            return `<tr>
-                <td>${stokMasuk}</td><td>${escapeHtml(k.tanggalKeluar)}</td><td><strong>${escapeHtml(k.brand)}</strong></td>
-                <td>${escapeHtml(k.barangKeluar)}</td><td>${k.jumlahKeluar}</td><td>${escapeHtml(k.satuan)}</td>
-                <td>${escapeHtml(k.namaPic)}</td>
-                <td class="action-icons"><i class="fas fa-edit" onclick="editKeluar(${k.id})"></i><i class="fas fa-trash-alt" onclick="hapusKeluar(${k.id})"></i></td>
-            </tr>`;
+        if(!dataKeluar.length) { tbody.innerHTML = '<tr><td colspan="8">Tidak ada数据</td></tr>'; return; }
+        tbody.innerHTML = dataKeluar.map(k => { const stokMasuk = getTotalMasuk(k.brand, k.barangKeluar);
+            return `<tr><td>${stokMasuk}</td><td>${escapeHtml(k.tanggalKeluar)}</td><td><strong>${escapeHtml(k.brand)}</strong></td><td>${escapeHtml(k.barangKeluar)}</td><td>${k.jumlahKeluar}</td><td>${escapeHtml(k.satuan)}</td><td>${escapeHtml(k.namaPic)}</td><td class="action-icons"><i class="fas fa-edit" onclick="editKeluar(${k.id})"></i><i class="fas fa-trash-alt" onclick="hapusKeluar(${k.id})"></i></td></tr>`;
         }).join('');
     }
 
+    // REKAP dengan Tampilan Kartu yang Disesuaikan
     function buildRekapStok() {
         const searchTerm = document.getElementById('rekapSearchInput').value.toLowerCase();
         let items = getAllItems();
         if(searchTerm) items = items.filter(i => i.brand.toLowerCase().includes(searchTerm) || i.namaBarang.toLowerCase().includes(searchTerm));
-        let html = '<table style="width:100%"><thead><tr><th>Brand</th><th>Nama Barang</th><th>Total Masuk</th><th>Total Keluar</th><th>Stok Akhir</th><th>Rincian Pengambilan</th></tr></thead><tbody>';
+        if(items.length === 0) { document.getElementById('rekapContainer').innerHTML = '<p class="small-note">Tidak ada data sesuai pencarian</p>'; return; }
+        let html = '';
         for(let item of items) {
             const totalMasuk = getTotalMasuk(item.brand, item.namaBarang);
             const totalKeluar = getTotalKeluar(item.brand, item.namaBarang);
             const stokAkhir = totalMasuk - totalKeluar;
             const riwayat = dataKeluar.filter(k => k.brand === item.brand && k.barangKeluar === item.namaBarang);
-            let rincian = riwayat.length ? riwayat.map(k => `${k.tanggalKeluar}: ${k.jumlahKeluar} ${k.satuan} (${k.namaPic})`).join('<br/>') : '<span class="badge">Tidak ada</span>';
-            html += `<tr><td>${escapeHtml(item.brand)}</td><td>${escapeHtml(item.namaBarang)}</td><td>${totalMasuk}</td><td>${totalKeluar}</td><td style="background:#fef9e3; font-weight:bold;">${stokAkhir}</td><td style="font-size:0.65rem;">${rincian}</td></tr>`;
+            let rincianHtml = riwayat.length ? riwayat.map(k => `<span class="badge">${k.tanggalKeluar}: ${k.jumlahKeluar} ${k.satuan} (${k.namaPic})</span>`).join(' ') : '<span class="badge">Tidak ada pengambilan</span>';
+            html += `
+                <div class="rekap-card-item">
+                    <div class="rekap-brand"><i class="fas fa-tag"></i> ${escapeHtml(item.brand)} - ${escapeHtml(item.namaBarang)}</div>
+                    <div><span class="badge">📦 Total Masuk: ${totalMasuk} ${escapeHtml(item.namaBarang.split(' ')[0])}</span> 
+                          <span class="badge">📤 Total Keluar: ${totalKeluar}</span>
+                          <span class="rekap-stok">✅ Stok Akhir: ${stokAkhir}</span>
+                    </div>
+                    <div class="rekap-detail"><i class="fas fa-history"></i> Rincian Pengambilan:<br/> ${rincianHtml}</div>
+                </div>
+            `;
         }
-        html += `</tbody></table>`;
-        if(!items.length) html = '<p class="small-note">Tidak ada data sesuai pencarian</p>';
         document.getElementById('rekapContainer').innerHTML = html;
     }
 
@@ -515,56 +406,19 @@
         XLSX.utils.book_append_sheet(wb, ws, "Rekap_Stok");
         XLSX.writeFile(wb, `Rekap_Stok_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
+    function printRekap() { window.print(); }
 
-    function printRekap() {
-        const container = document.getElementById('rekapContainer').cloneNode(true);
-        const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Rekap Stok</title><style>body{font-family:Arial;padding:20px;} table{border-collapse:collapse;width:100%} th,td{border:1px solid #aaa;padding:6px;}</style></head><body><h2>Rekap Stok Akhir</h2>${container.innerHTML}</body></html>`);
-        win.document.close(); win.print(); win.onafterprint = () => win.close();
-    }
-
-    // Edit & Hapus (tanpa tombol manual)
-    function editMasuk(id) { 
-        let item = dataMasuk.find(m=>m.id===id); 
-        if(item){ 
-            let t=prompt("Tanggal",item.tanggal); if(t) item.tanggal=t; 
-            let b=prompt("Brand",item.brand); if(b) item.brand=b; 
-            let n=prompt("Nama Barang",item.namaBarang); if(n) item.namaBarang=n; 
-            let sp=prompt("Supplier",item.supplier); if(sp) item.supplier=sp; 
-            let j=parseInt(prompt("Jumlah",item.jumlah)); if(!isNaN(j)) item.jumlah=j; 
-            let sat=prompt("Satuan",item.satuan); if(sat) item.satuan=sat; 
-            refreshAll(); 
-        } 
-    }
-    function hapusMasuk(id) { 
-        if(confirm("Hapus data masuk?")) { 
-            dataMasuk = dataMasuk.filter(m=>m.id!==id); 
-            refreshAll(); 
-        } 
-    }
-    function editKeluar(id) { 
-        let item = dataKeluar.find(k=>k.id===id); 
-        if(item){ 
-            let t=prompt("Tanggal Keluar",item.tanggalKeluar); if(t) item.tanggalKeluar=t; 
-            let b=prompt("Brand",item.brand); if(b) item.brand=b; 
-            let brg=prompt("Nama Barang",item.barangKeluar); if(brg) item.barangKeluar=brg; 
-            let j=parseInt(prompt("Jumlah",item.jumlahKeluar)); if(!isNaN(j)) item.jumlahKeluar=j; 
-            let sat=prompt("Satuan",item.satuan); if(sat) item.satuan=sat; 
-            let pic=prompt("PIC",item.namaPic); if(pic) item.namaPic=pic; 
-            refreshAll(); 
-        } 
-    }
-    function hapusKeluar(id) { 
-        if(confirm("Hapus data keluar?")) { 
-            dataKeluar = dataKeluar.filter(k=>k.id!==id); 
-            refreshAll(); 
-        } 
-    }
+    // Edit & Hapus
+    function editMasuk(id) { let item = dataMasuk.find(m=>m.id===id); if(item){ let t=prompt("Tgl",item.tanggal); if(t) item.tanggal=t; let b=prompt("Brand",item.brand); if(b) { item.brand=b; masterBrands.add(b); } let n=prompt("Nama",item.namaBarang); if(n) { item.namaBarang=n; masterNamaBarang.add(n); } let sp=prompt("Supplier",item.supplier); if(sp) { item.supplier=sp; masterSupplier.add(sp); } let j=parseInt(prompt("Jumlah",item.jumlah)); if(!isNaN(j)) item.jumlah=j; let sat=prompt("Satuan",item.satuan); if(sat) { item.satuan=sat; masterSatuan.add(sat); } syncMasterToStorage(); refreshAll(); } }
+    function hapusMasuk(id) { if(confirm("Hapus data masuk?")) { dataMasuk = dataMasuk.filter(m=>m.id!==id); refreshAll(); } }
+    function editKeluar(id) { let item = dataKeluar.find(k=>k.id===id); if(item){ let t=prompt("Tgl Keluar",item.tanggalKeluar); if(t) item.tanggalKeluar=t; let b=prompt("Brand",item.brand); if(b) item.brand=b; let brg=prompt("Barang",item.barangKeluar); if(brg) item.barangKeluar=brg; let j=parseInt(prompt("Jumlah",item.jumlahKeluar)); if(!isNaN(j)) item.jumlahKeluar=j; let sat=prompt("Satuan",item.satuan); if(sat) item.satuan=sat; let pic=prompt("PIC",item.namaPic); if(pic) item.namaPic=pic; refreshAll(); } }
+    function hapusKeluar(id) { if(confirm("Hapus data keluar?")) { dataKeluar = dataKeluar.filter(k=>k.id!==id); refreshAll(); } }
 
     function refreshAll() {
         renderTabelMasuk();
         renderTabelKeluar();
-        updateAllDropdowns();
+        loadMasterData();
+        integrateMasterToDropdowns();
         buildRekapStok();
         saveToStorage();
     }
@@ -573,6 +427,7 @@
     const today = new Date().toISOString().slice(0,10);
     window.onload = () => {
         loadFromStorage();
+        loadMasterData();
         refreshAll();
         document.getElementById('inputTanggalMasuk').value = today;
         document.getElementById('inputTanggalKeluar').value = today;
@@ -580,6 +435,10 @@
         document.getElementById('btnSubmitKeluar').onclick = addBarangKeluar;
         document.getElementById('exportExcelBtn').onclick = exportToExcel;
         document.getElementById('printRekapBtn').onclick = printRekap;
+        document.getElementById('tambahBrandBtn').onclick = tambahBrandBaru;
+        document.getElementById('tambahNamaBarangBtn').onclick = tambahNamaBarangBaru;
+        document.getElementById('tambahSatuanBtn').onclick = tambahSatuanBaru;
+        document.getElementById('tambahSupplierBtn').onclick = tambahSupplierBaru;
         const searchInput = document.getElementById('rekapSearchInput');
         searchInput.addEventListener('input', () => buildRekapStok());
         document.getElementById('clearRekapSearch').onclick = () => { searchInput.value = ''; buildRekapStok(); };
