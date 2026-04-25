@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -305,19 +304,6 @@
         <div class="sub" style="font-size: 0.75rem; margin-bottom: 8px;">Barang Masuk Supplier & Stok Consumable</div>
     </div>
 
-    <!-- Filter Bar (tanpa tombol reset permanen) -->
-    <div class="filter-bar">
-        <div class="filter-group">
-            <label>Supplier</label>
-            <select id="dropdownSupplier"></select>
-        </div>
-        <div class="filter-group">
-            <label>Satuan</label>
-            <select id="dropdownSatuan"></select>
-        </div>
-        <button class="btn-reset-filter" id="resetFilterBtn"><i class="fas fa-undo-alt"></i> Reset Filter</button>
-    </div>
-
     <!-- DUA KARTU INPUT: Barang Masuk & Barang Keluar (Dropdown) -->
     <div class="input-container">
         <!-- Card Input Barang Masuk -->
@@ -355,8 +341,6 @@
         <div class="panel">
             <div class="panel-header">
                 <h2><i class="fas fa-truck"></i> Data Barang Masuk</h2>
-                <button class="btn-add" id="btnAddMasukManual"><i class="fas fa-plus"></i> Manual</button>
-            </div>
             <div class="table-wrapper">
                 <table id="tableMasuk">
                     <thead><tr><th>Tanggal</th><th>Brand</th><th>Nama Barang</th><th>Supplier</th><th>Jml</th><th>Satuan</th><th>Aksi</th></tr></thead>
@@ -367,8 +351,6 @@
         <div class="panel">
             <div class="panel-header">
                 <h2><i class="fas fa-clipboard-list"></i> Stock Consumable</h2>
-                <button class="btn-add" id="btnAddKeluarManual"><i class="fas fa-plus"></i> Manual Keluar</button>
-            </div>
             <div class="table-wrapper">
                 <table id="tableKeluar">
                     <thead><tr><th>Stok Masuk</th><th>Tgl Keluar</th><th>Brand</th><th>Nama Barang</th><th>Jml Keluar</th><th>Satuan</th><th>PIC</th><th>Aksi</th></tr></thead>
