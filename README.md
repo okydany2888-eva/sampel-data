@@ -60,7 +60,7 @@
         .orientation-badge {
             position: fixed;
             bottom: 16px;
-            right: 9px;
+            right: 10px;
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(4px);
             color: white;
@@ -102,7 +102,7 @@
 
         .panel {
             background: white;
-            border-radius: 28px;
+            border-radius: 19px;
             box-shadow: 0 12px 30px rgba(0,0,0,0.05);
             overflow: hidden;
             border: 1px solid #e2e8f0;
@@ -345,9 +345,6 @@
     <div class="dashboard-header">
         <h1><i class="fas fa-boxes"></i> Manajemen Inventory + Brand</h1>
         <div class="sub">Input Dropdown Barang Masuk & Barang Keluar/Consumable</div>
-    </div>
-
-        </div>
     </div>
 
     <!-- DUA TABEL INPUT: Barang Masuk & Barang Keluar (dengan dropdown) -->
