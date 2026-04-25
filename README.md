@@ -400,7 +400,6 @@
         <div class="panel">
             <div class="panel-header">
                 <h2><i class="fas fa-truck"></i> Data Barang Masuk Supplier</h2>
-                <button class="btn-add" id="btnAddMasukManual"><i class="fas fa-plus"></i> Tambah Manual</button>
             </div>
             <div class="table-wrapper">
                 <table id="tableMasuk">
@@ -412,7 +411,6 @@
         <div class="panel">
             <div class="panel-header">
                 <h2><i class="fas fa-clipboard-list"></i> Stock Barang Consumable</h2>
-                <button class="btn-add" id="btnAddKeluarManual"><i class="fas fa-plus"></i> Tambah Keluar Manual</button>
             </div>
             <div class="table-wrapper">
                 <table id="tableKeluar">
