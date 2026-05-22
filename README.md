@@ -2,394 +2,680 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Inventory Management - Mobile | Barang Masuk & Keluar + Input Cepat</title>
-    <!-- Font Awesome 6 -->
+    <title>Inventory Management - Multi Menu Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
-    <!-- SheetJS (XLSX) -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #f1f5f9; padding: 12px; color: #0f172a; }
-        .container { max-width: 100%; margin: 0 auto; }
-        .dashboard-header { margin-bottom: 16px; }
-        .dashboard-header h1 { font-size: 1.3rem; font-weight: 700; background: linear-gradient(135deg, #1e3c72, #2b3b6e); -webkit-background-clip: text; background-clip: text; color: transparent; display: flex; align-items: center; gap: 8px; }
-        .sub { font-size: 0.7rem; color: #475569; margin-top: 4px; padding-left: 8px; border-left: 3px solid #3b82f6; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-        /* KARTU INPUT */
-        .input-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
-        .input-card { background: white; border-radius: 20px; padding: 14px 16px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .input-card h3 { font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; color: #0f3b5c; }
-        .input-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
-        .input-item { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 100px; }
-        .input-item label { font-size: 0.6rem; font-weight: 600; color: #334155; }
-        .input-item input, .input-item select { padding: 6px 8px; border-radius: 12px; border: 1px solid #cbd5e1; background: white; font-size: 0.75rem; }
-        .btn-submit { background: #10b981; color: white; border: none; padding: 6px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; }
-        .btn-submit-keluar { background: #f59e0b; }
-        .btn-small-add { background: #e2e8f0; border: none; padding: 4px 10px; border-radius: 20px; font-size: 0.6rem; cursor: pointer; margin-left: 6px; color: #1e40af; }
+        body {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
 
-        /* Dua Panel */
-        .two-panels { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
-        .panel { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; width: 100%; }
-        .panel-header { padding: 12px 16px; background: #fafcff; border-bottom: 1px solid #eef2ff; }
-        .panel-header h2 { font-size: 1rem; font-weight: 700; color: #0f3b5c; display: flex; align-items: center; gap: 6px; }
-        .table-wrapper { overflow-x: auto; padding: 0 12px 12px 12px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 480px; }
-        th, td { padding: 8px 4px; text-align: left; border-bottom: 1px solid #e9eef3; }
-        th { background-color: #f8fafc; font-weight: 600; }
-        .action-icons i { margin: 0 3px; cursor: pointer; font-size: 0.85rem; }
+        /* ========= SIDEBAR MENU ========= */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar-menu {
+            width: 280px;
+            background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+            color: #e2e8f0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .nav-menu {
+            padding: 0 12px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            margin-bottom: 6px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #cbd5e1;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+        }
+
+        .menu-icon {
+            width: 32px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .menu-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Tombol Hamburger untuk mobile */
+        .hamburger {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1001;
+            background: #0f172a;
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Overlay untuk mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* ========= KONTEN UTAMA ========= */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .page-title {
+            margin-bottom: 24px;
+        }
+
+        .page-title h1 {
+            font-size: 1.5rem;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Card Container */
+        .card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            background: #fafcff;
+            border-bottom: 1px solid #eef2ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f3b5c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-add-keluar {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        /* Form Input */
+        .input-form {
+            padding: 20px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .input-form.show {
+            display: block;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .form-group label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #475569;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.75rem;
+            background: white;
+        }
+
+        .btn-submit {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        /* Tabel */
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0 16px 16px 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #e9eef3;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .action-icons i {
+            margin: 0 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
         .fa-edit { color: #3b82f6; }
         .fa-trash-alt { color: #ef4444; }
 
-        /* REKAP SECTION - Disesuaikan */
-        .rekap-section { background: white; border-radius: 20px; padding: 14px 16px; border: 1px solid #e2e8f0; margin-top: 8px; }
-        .rekap-header { margin-bottom: 12px; }
-        .rekap-header h3 { font-size: 1rem; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-        .rekap-search { display: flex; gap: 8px; align-items: center; background: #f1f5f9; padding: 6px 12px; border-radius: 40px; margin-bottom: 10px; }
-        .rekap-search input { border: none; background: transparent; padding: 6px 0; outline: none; width: 100%; font-size: 0.8rem; }
-        .rekap-actions { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 12px; }
-        .btn-excel, .btn-print { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.65rem; display: inline-flex; align-items: center; gap: 4px; }
-        .btn-excel { background: #e8f5e9; color: #2e7d32; }
-        .btn-print { background: #e3f2fd; color: #1565c0; }
-        .badge { background: #eef2ff; padding: 3px 8px; border-radius: 30px; font-size: 0.6rem; display: inline-block; margin: 2px 0; }
-        .small-note { font-size: 0.6rem; color: #5b6e8c; margin-top: 10px; text-align: center; }
-        .rekap-card-item { background: #f8fafc; border-radius: 16px; padding: 12px; margin-bottom: 12px; border-left: 4px solid #3b82f6; }
-        .rekap-brand { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; }
-        .rekap-detail { font-size: 0.7rem; color: #334155; margin-top: 6px; }
-        .rekap-stok { font-weight: 800; font-size: 0.9rem; color: #0f3b5c; }
-        button { touch-action: manipulation; }
-        @media print { .input-container, .btn-excel, .btn-print, .rekap-actions, .action-icons { display: none !important; } }
+        /* Rekap Stok dengan Kartu */
+        .rekap-container {
+            padding: 16px;
+        }
+
+        .rekap-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .rekap-brand {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .rekap-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .rekap-stok-akhir {
+            font-weight: 800;
+            font-size: 1rem;
+            color: #0f3b5c;
+        }
+
+        .rekap-detail {
+            font-size: 0.7rem;
+            color: #475569;
+            margin-top: 8px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 40px;
+            margin-bottom: 16px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar-menu {
+                transform: translateX(-100%);
+                width: 260px;
+            }
+            .sidebar-menu.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+                padding-top: 60px;
+            }
+            .hamburger {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .overlay.show {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="dashboard-header">
-        <h1><i class="fas fa-boxes"></i> Inventory Management</h1>
-        <div class="sub">Barang Masuk Supplier & Stok Consumable | Input Cepat + Rekap Stok</div>
-    </div>
+<div class="app-container">
+    <!-- Tombol Hamburger -->
+    <button class="hamburger" id="hamburgerBtn">☰</button>
+    <div class="overlay" id="overlay"></div>
 
-    <!-- KARTU INPUT: Barang Masuk -->
-    <div class="input-container">
-        <div class="input-card">
-            <h3><i class="fas fa-arrow-down" style="color:#10b981;"></i> + Barang Masuk (Supplier)</h3>
-            <div class="input-row">
-                <div class="input-item"><label>Tanggal</label><input type="date" id="inputTanggalMasuk"></div>
-                <div class="input-item"><label>Brand <button type="button" class="btn-small-add" id="tambahBrandBtn">+ Baru</button></label><select id="inputBrandMasuk"><option value="">Pilih Brand</option></select></div>
-                <div class="input-item"><label>Nama Barang <button type="button" class="btn-small-add" id="tambahNamaBarangBtn">+ Baru</button></label><select id="inputNamaBarangMasuk"><option value="">Pilih Barang</option></select></div>
-                <div class="input-item"><label>Jumlah</label><input type="number" id="inputJumlahMasuk" value="1" min="1"></div>
-                <div class="input-item"><label>Satuan <button type="button" class="btn-small-add" id="tambahSatuanBtn">+ Baru</button></label><select id="inputSatuanMasuk"><option value="">Pilih Satuan</option></select></div>
-                <div class="input-item"><label>Supplier <button type="button" class="btn-small-add" id="tambahSupplierBtn">+ Baru</button></label><input type="text" id="inputSupplierMasuk" placeholder="Nama supplier" list="supplierList"></div>
-                <datalist id="supplierList"></datalist>
-                <button class="btn-submit" id="btnSubmitMasuk"><i class="fas fa-plus-circle"></i> Tambah</button>
-            </div>
+    <!-- Sidebar Menu -->
+    <div class="sidebar-menu" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-boxes"></i> Inventory Pro</h2>
         </div>
-
-        <!-- KARTU INPUT: Barang Keluar -->
-        <div class="input-card">
-            <h3><i class="fas fa-arrow-up" style="color:#f59e0b;"></i> - Barang Keluar (Consumable)</h3>
-            <div class="input-row">
-                <div class="input-item"><label>Tgl Keluar</label><input type="date" id="inputTanggalKeluar"></div>
-                <div class="input-item"><label>Brand</label><select id="inputBrandKeluar"><option value="">Pilih Brand</option></select></div>
-                <div class="input-item"><label>Nama Barang</label><select id="inputNamaBarangKeluar"><option value="">Pilih Barang</option></select></div>
-                <div class="input-item"><label>Jumlah</label><input type="number" id="inputJumlahKeluar" value="1" min="1"></div>
-                <div class="input-item"><label>Satuan</label><select id="inputSatuanKeluar"><option value="">Pilih Satuan</option></select></div>
-                <div class="input-item"><label>PIC</label><input type="text" id="inputPicKeluar" placeholder="Penanggung jawab"></div>
-                <button class="btn-submit btn-submit-keluar" id="btnSubmitKeluar"><i class="fas fa-minus-circle"></i> Tambah Keluar</button>
+        <div class="nav-menu">
+            <div class="menu-item active" data-menu="beranda">
+                <div class="menu-icon"><i class="fas fa-home"></i></div>
+                <div class="menu-text">🏠 Beranda</div>
             </div>
-            <div class="small-note" style="text-align:left; margin-top:6px;">* Stok akan berkurang sesuai jumlah keluar.</div>
-        </div>
-    </div>
-
-    <!-- Data Barang Masuk -->
-    <div class="two-panels">
-        <div class="panel">
-            <div class="panel-header"><h2><i class="fas fa-truck"></i> Data Barang Masuk</h2></div>
-            <div class="table-wrapper">
-                <table id="tableMasuk"><thead><tr><th>Tanggal</th><th>Brand</th><th>Nama Barang</th><th>Supplier</th><th>Jml</th><th>Satuan</th><th>Aksi</th></tr></thead><tbody id="tbodyMasuk"></tbody></table>
+            <div class="menu-item" data-menu="barang-masuk">
+                <div class="menu-icon"><i class="fas fa-arrow-down"></i></div>
+                <div class="menu-text">📦 Barang Masuk</div>
             </div>
-        </div>
-        <div class="panel">
-            <div class="panel-header"><h2><i class="fas fa-clipboard-list"></i> Stock Consumable</h2></div>
-            <div class="table-wrapper">
-                <table id="tableKeluar"><thead><tr><th>Stok Masuk</th><th>Tgl Keluar</th><th>Brand</th><th>Nama Barang</th><th>Jml</th><th>Satuan</th><th>PIC</th><th>Aksi</th></tr></thead><tbody id="tbodyKeluar"></tbody></table>
+            <div class="menu-item" data-menu="barang-keluar">
+                <div class="menu-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="menu-text">📤 Barang Keluar</div>
+            </div>
+            <div class="menu-item" data-menu="rekap-stok">
+                <div class="menu-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="menu-text">📊 Rekap Stok</div>
+            </div>
+            <div class="menu-item" data-menu="laporan">
+                <div class="menu-icon"><i class="fas fa-print"></i></div>
+                <div class="menu-text">📄 Laporan</div>
             </div>
         </div>
     </div>
 
-    <!-- REKAP STOK AKHIR - Tampilan Kartu yang Disesuaikan -->
-    <div class="rekap-section">
-        <div class="rekap-header">
-            <h3><i class="fas fa-chart-line"></i> Rekap Stok Akhir</h3>
-            <div class="rekap-search">
-                <i class="fas fa-search"></i>
-                <input type="text" id="rekapSearchInput" placeholder="Cari Brand / Nama Barang...">
-                <button id="clearRekapSearch" style="background:none; border:none; font-size:1rem;"><i class="fas fa-times-circle"></i></button>
-            </div>
-            <div class="rekap-actions">
-                <button class="btn-excel" id="exportExcelBtn"><i class="fas fa-file-excel"></i> Excel</button>
-                <button class="btn-print" id="printRekapBtn"><i class="fas fa-print"></i> Cetak</button>
+    <!-- Konten Utama -->
+    <div class="main-content" id="mainContent">
+        <div class="page-title">
+            <h1 id="mainPageTitle"><i class="fas fa-home"></i> Beranda</h1>
+        </div>
+
+        <!-- ========= MENU BERANDA ========= -->
+        <div id="menu-beranda" class="menu-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-simple"></i> Ringkasan Inventory</h2>
+                </div>
+                <div class="rekap-container" id="ringkasanDashboard">
+                    <!-- Ringkasan akan diisi JS -->
+                </div>
             </div>
         </div>
-        <div id="rekapContainer"></div>
-        <div class="small-note">* Stok Akhir = Total Masuk - Total Keluar (berdasarkan Brand + Nama Barang)</div>
+
+        <!-- ========= MENU BARANG MASUK ========= -->
+        <div id="menu-barang-masuk" class="menu-page" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-truck"></i> Data Barang Masuk</h2>
+                    <button class="btn-add" id="toggleFormMasukBtn"><i class="fas fa-plus"></i> Tambah Barang</button>
+                </div>
+                <div class="input-form" id="formBarangMasuk">
+                    <div class="form-row">
+                        <div class="form-group"><label>Tanggal</label><input type="date" id="tglMasuk"></div>
+                        <div class="form-group"><label>Brand</label><input type="text" id="brandMasuk" placeholder="Brand"></div>
+                        <div class="form-group"><label>Nama Barang</label><input type="text" id="namaMasuk" placeholder="Nama barang"></div>
+                        <div class="form-group"><label>Supplier</label><input type="text" id="supplierMasuk" placeholder="Supplier"></div>
+                        <div class="form-group"><label>Jumlah</label><input type="number" id="jumlahMasuk" value="1"></div>
+                        <div class="form-group"><label>Satuan</label><input type="text" id="satuanMasuk" placeholder="pcs/kg"></div>
+                        <div class="form-group"><button class="btn-submit" id="simpanMasukBtn"><i class="fas fa-save"></i> Simpan</button></div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="tableMasuk">
+                        <thead><tr><th>Tanggal</th><th>Brand</th><th>Nama Barang</th><th>Supplier</th><th>Jumlah</th><th>Satuan</th><th>Aksi</th></tr></thead>
+                        <tbody id="tbodyMasuk"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========= MENU BARANG KELUAR ========= -->
+        <div id="menu-barang-keluar" class="menu-page" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-clipboard-list"></i> Data Barang Keluar</h2>
+                    <button class="btn-add btn-add-keluar" id="toggleFormKeluarBtn"><i class="fas fa-plus"></i> Tambah Keluar</button>
+                </div>
+                <div class="input-form" id="formBarangKeluar">
+                    <div class="form-row">
+                        <div class="form-group"><label>Tanggal</label><input type="date" id="tglKeluar"></div>
+                        <div class="form-group"><label>Brand</label><input type="text" id="brandKeluar" placeholder="Brand"></div>
+                        <div class="form-group"><label>Nama Barang</label><input type="text" id="namaKeluar" placeholder="Nama barang"></div>
+                        <div class="form-group"><label>Jumlah</label><input type="number" id="jumlahKeluar" value="1"></div>
+                        <div class="form-group"><label>Satuan</label><input type="text" id="satuanKeluar" placeholder="pcs/kg"></div>
+                        <div class="form-group"><label>PIC</label><input type="text" id="picKeluar" placeholder="PIC"></div>
+                        <div class="form-group"><button class="btn-submit" id="simpanKeluarBtn"><i class="fas fa-save"></i> Simpan</button></div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="tableKeluar">
+                        <thead><tr><th>Tanggal</th><th>Brand</th><th>Nama Barang</th><th>Jumlah</th><th>Satuan</th><th>PIC</th><th>Aksi</th></tr></thead>
+                        <tbody id="tbodyKeluar"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========= MENU REKAP STOK ========= -->
+        <div id="menu-rekap-stok" class="menu-page" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Rekap Stok Akhir</h2>
+                </div>
+                <div class="rekap-container">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchRekap" placeholder="Cari brand atau nama barang...">
+                        <button id="clearSearch" style="background:none;border:none;"><i class="fas fa-times-circle"></i></button>
+                    </div>
+                    <div id="rekapStokList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========= MENU LAPORAN ========= -->
+        <div id="menu-laporan" class="menu-page" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-print"></i> Export & Cetak Laporan</h2>
+                </div>
+                <div class="rekap-container" style="text-align:center; padding: 40px;">
+                    <button id="exportExcelBtn" style="background:#10b981; color:white; border:none; padding:12px 24px; border-radius:12px; margin:10px; cursor:pointer;"><i class="fas fa-file-excel"></i> Export ke Excel</button>
+                    <button id="printLaporanBtn" style="background:#3b82f6; color:white; border:none; padding:12px 24px; border-radius:12px; margin:10px; cursor:pointer;"><i class="fas fa-print"></i> Cetak Laporan</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // ========== DATA MODEL ==========
+    // ========= DATA STORAGE =========
     let dataMasuk = [];
     let dataKeluar = [];
 
-    // Helper functions
-    function getUniqueKey(brand, nama) { return `${brand}|${nama}`.toLowerCase(); }
+    function loadData() {
+        const savedMasuk = localStorage.getItem('menu_barang_masuk');
+        const savedKeluar = localStorage.getItem('menu_barang_keluar');
+        if(savedMasuk) dataMasuk = JSON.parse(savedMasuk);
+        else dataMasuk = [];
+        if(savedKeluar) dataKeluar = JSON.parse(savedKeluar);
+        else dataKeluar = [];
+    }
+
+    function saveData() {
+        localStorage.setItem('menu_barang_masuk', JSON.stringify(dataMasuk));
+        localStorage.setItem('menu_barang_keluar', JSON.stringify(dataKeluar));
+    }
+
+    // Helper
     function getTotalMasuk(brand, nama) {
         return dataMasuk.filter(m => m.brand === brand && m.namaBarang === nama).reduce((s, m) => s + m.jumlah, 0);
     }
     function getTotalKeluar(brand, nama) {
-        return dataKeluar.filter(k => k.brand === brand && k.barangKeluar === nama).reduce((s, k) => s + k.jumlahKeluar, 0);
+        return dataKeluar.filter(k => k.brand === brand && k.namaBarang === nama).reduce((s, k) => s + k.jumlah, 0);
     }
     function getAllItems() {
         const map = new Map();
-        dataMasuk.forEach(m => map.set(getUniqueKey(m.brand, m.namaBarang), { brand: m.brand, namaBarang: m.namaBarang }));
-        dataKeluar.forEach(k => map.set(getUniqueKey(k.brand, k.barangKeluar), { brand: k.brand, namaBarang: k.barangKeluar }));
+        dataMasuk.forEach(m => map.set(`${m.brand}|${m.namaBarang}`, { brand: m.brand, namaBarang: m.namaBarang }));
+        dataKeluar.forEach(k => map.set(`${k.brand}|${k.namaBarang}`, { brand: k.brand, namaBarang: k.namaBarang }));
         return Array.from(map.values());
-    }
-
-    // Simpan & Muat
-    function loadFromStorage() {
-        const storedMasuk = localStorage.getItem('inv_masuk_final_v2');
-        const storedKeluar = localStorage.getItem('inv_keluar_final_v2');
-        if(storedMasuk) dataMasuk = JSON.parse(storedMasuk);
-        else {
-            dataMasuk = [
-                { id: 1, tanggal: '2025-04-01', brand: 'Sidney', namaBarang: 'Kertas A4', supplier: 'PT Maju Jaya', jumlah: 500, satuan: 'Rim' },
-                { id: 2, tanggal: '2025-04-02', brand: 'Epson', namaBarang: 'Tinta Hitam', supplier: 'Sumber Makmur', jumlah: 20, satuan: 'Botol' },
-                { id: 3, tanggal: '2025-04-10', brand: 'Snowman', namaBarang: 'Spidol', supplier: 'Alat Kantor', jumlah: 50, satuan: 'Pcs' }
-            ];
-        }
-        if(storedKeluar) dataKeluar = JSON.parse(storedKeluar);
-        else {
-            dataKeluar = [
-                { id: 101, tanggalKeluar: '2025-04-05', brand: 'Sidney', barangKeluar: 'Kertas A4', jumlahKeluar: 120, satuan: 'Rim', namaPic: 'Andi' },
-                { id: 102, tanggalKeluar: '2025-04-08', brand: 'Epson', barangKeluar: 'Tinta Hitam', jumlahKeluar: 3, satuan: 'Botol', namaPic: 'Budi' }
-            ];
-        }
-    }
-    function saveToStorage() {
-        localStorage.setItem('inv_masuk_final_v2', JSON.stringify(dataMasuk));
-        localStorage.setItem('inv_keluar_final_v2', JSON.stringify(dataKeluar));
-    }
-
-    // Update semua dropdown + datalist
-    function updateAllDropdowns() {
-        const items = getAllItems();
-        const brandSet = new Set(items.map(i => i.brand));
-        const barangByBrand = {};
-        items.forEach(i => { if(!barangByBrand[i.brand]) barangByBrand[i.brand] = new Set(); barangByBrand[i.brand].add(i.namaBarang); });
-        
-        function setupBrandBarang(brandSelectId, barangSelectId) {
-            const brandSelect = document.getElementById(brandSelectId);
-            const barangSelect = document.getElementById(barangSelectId);
-            if(!brandSelect || !barangSelect) return;
-            const currentBrand = brandSelect.value;
-            brandSelect.innerHTML = '<option value="">Pilih Brand</option>' + Array.from(brandSet).map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
-            if(currentBrand && brandSet.has(currentBrand)) brandSelect.value = currentBrand;
-            const updateBarang = () => {
-                const selectedBrand = brandSelect.value;
-                barangSelect.innerHTML = '<option value="">Pilih Barang</option>';
-                if(selectedBrand && barangByBrand[selectedBrand]) {
-                    Array.from(barangByBrand[selectedBrand]).forEach(nama => {
-                        barangSelect.innerHTML += `<option value="${escapeHtml(nama)}">${escapeHtml(nama)}</option>`;
-                    });
-                }
-            };
-            brandSelect.onchange = updateBarang;
-            updateBarang();
-        }
-        setupBrandBarang('inputBrandMasuk', 'inputNamaBarangMasuk');
-        setupBrandBarang('inputBrandKeluar', 'inputNamaBarangKeluar');
-        
-        const allSatuan = [...new Set([...dataMasuk.map(m=>m.satuan), ...dataKeluar.map(k=>k.satuan)])];
-        [ 'inputSatuanMasuk', 'inputSatuanKeluar' ].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.innerHTML = '<option value="">Pilih Satuan</option>' + allSatuan.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
-        });
-        
-        // Datalist supplier
-        const allSupplier = [...new Set(dataMasuk.map(m=>m.supplier))];
-        const datalist = document.getElementById('supplierList');
-        if(datalist) datalist.innerHTML = allSupplier.map(s=>`<option value="${escapeHtml(s)}">`).join('');
-    }
-
-    // Fungsi tambah data baru untuk dropdown (brand, nama barang, satuan, supplier)
-    function tambahBrandBaru() { let val = prompt("Masukkan Brand baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageBrand(val); refreshAll(); alert(`Brand "${val}" ditambahkan.`); } }
-    function tambahNamaBarangBaru() { let val = prompt("Masukkan Nama Barang baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageNama(val); refreshAll(); alert(`Nama Barang "${val}" ditambahkan.`); } }
-    function tambahSatuanBaru() { let val = prompt("Masukkan Satuan baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageSatuan(val); refreshAll(); alert(`Satuan "${val}" ditambahkan.`); } }
-    function tambahSupplierBaru() { let val = prompt("Masukkan Supplier baru:"); if(val && val.trim()) { tambahEntitasBaruKeStorageSupplier(val); refreshAll(); alert(`Supplier "${val}" ditambahkan.`); } }
-    
-    // Untuk menyimpan entitas agar dropdown tetap sinkron, kita simpan melalui localStorage khusus master data
-    let masterBrands = new Set(); let masterNamaBarang = new Set(); let masterSatuan = new Set(); let masterSupplier = new Set();
-    function loadMasterData() {
-        const stored = localStorage.getItem('inv_master_data');
-        if(stored) {
-            const data = JSON.parse(stored);
-            masterBrands = new Set(data.brands || []);
-            masterNamaBarang = new Set(data.namaBarang || []);
-            masterSatuan = new Set(data.satuan || []);
-            masterSupplier = new Set(data.supplier || []);
-        } else {
-            // inisialisasi dari data yang ada
-            dataMasuk.forEach(m => { masterBrands.add(m.brand); masterNamaBarang.add(m.namaBarang); masterSatuan.add(m.satuan); masterSupplier.add(m.supplier); });
-            dataKeluar.forEach(k => { masterBrands.add(k.brand); masterNamaBarang.add(k.barangKeluar); masterSatuan.add(k.satuan); });
-        }
-        syncMasterToStorage();
-    }
-    function syncMasterToStorage() {
-        localStorage.setItem('inv_master_data', JSON.stringify({
-            brands: Array.from(masterBrands), namaBarang: Array.from(masterNamaBarang),
-            satuan: Array.from(masterSatuan), supplier: Array.from(masterSupplier)
-        }));
-    }
-    function tambahEntitasBaruKeStorageBrand(b) { masterBrands.add(b); syncMasterToStorage(); }
-    function tambahEntitasBaruKeStorageNama(n) { masterNamaBarang.add(n); syncMasterToStorage(); }
-    function tambahEntitasBaruKeStorageSatuan(s) { masterSatuan.add(s); syncMasterToStorage(); }
-    function tambahEntitasBaruKeStorageSupplier(s) { masterSupplier.add(s); syncMasterToStorage(); }
-    
-    // Integrasi pada refreshAll untuk memuat master dan dropdown yang lengkap
-    function integrateMasterToDropdowns() {
-        // Untuk input select brand & nama barang, kita perlu memastikan semua master ada di opsi.
-        // updateAllDropdowns sudah mengambil dari items (data transaksi), tetapi kita bisa tambahkan opsi tambahan dari master.
-        const items = getAllItems();
-        const brandSet = new Set(items.map(i => i.brand));
-        masterBrands.forEach(b => brandSet.add(b));
-        const barangByBrandFull = {};
-        items.forEach(i => { if(!barangByBrandFull[i.brand]) barangByBrandFull[i.brand] = new Set(); barangByBrandFull[i.brand].add(i.namaBarang); });
-        masterNamaBarang.forEach(n => { 
-            // tambahkan ke semua brand? tidak, lebih baik tetap per brand, tapi untuk input bebas kita beri opsi tambahan di akhir.
-        });
-        function setupBrandBarangFull(brandSelectId, barangSelectId) {
-            const brandSelect = document.getElementById(brandSelectId);
-            const barangSelect = document.getElementById(barangSelectId);
-            if(!brandSelect) return;
-            const currentBrand = brandSelect.value;
-            brandSelect.innerHTML = '<option value="">Pilih Brand</option>' + Array.from(brandSet).map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
-            if(currentBrand && brandSet.has(currentBrand)) brandSelect.value = currentBrand;
-            const updateBarangFull = () => {
-                const selectedBrand = brandSelect.value;
-                barangSelect.innerHTML = '<option value="">Pilih Barang</option>';
-                if(selectedBrand) {
-                    const existingBarang = barangByBrandFull[selectedBrand] || new Set();
-                    // tambahkan juga dari masterNamaBarang (opsional)
-                    const allOptions = new Set([...existingBarang]);
-                    barangSelect.innerHTML += Array.from(allOptions).map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
-                }
-                // tambahkan opsi input manual jika tidak ada?
-            };
-            brandSelect.onchange = updateBarangFull;
-            updateBarangFull();
-        }
-        setupBrandBarangFull('inputBrandMasuk', 'inputNamaBarangMasuk');
-        setupBrandBarangFull('inputBrandKeluar', 'inputNamaBarangKeluar');
-        
-        const allSatuanFull = new Set([...dataMasuk.map(m=>m.satuan), ...dataKeluar.map(k=>k.satuan), ...masterSatuan]);
-        [ 'inputSatuanMasuk', 'inputSatuanKeluar' ].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.innerHTML = '<option value="">Pilih Satuan</option>' + Array.from(allSatuanFull).map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
-        });
-        const allSupplierFull = new Set([...dataMasuk.map(m=>m.supplier), ...masterSupplier]);
-        const datalist = document.getElementById('supplierList');
-        if(datalist) datalist.innerHTML = Array.from(allSupplierFull).map(s=>`<option value="${escapeHtml(s)}">`).join('');
-    }
-    
-    // CRUD Barang Masuk & Keluar
-    function addBarangMasuk() {
-        const tanggal = document.getElementById('inputTanggalMasuk').value;
-        if(!tanggal) { alert("Isi tanggal masuk"); return; }
-        let brand = document.getElementById('inputBrandMasuk').value;
-        if(!brand) { alert("Pilih atau tambah brand terlebih dahulu"); return; }
-        let namaBarang = document.getElementById('inputNamaBarangMasuk').value;
-        if(!namaBarang) { alert("Pilih Nama Barang"); return; }
-        let jumlah = parseInt(document.getElementById('inputJumlahMasuk').value);
-        if(isNaN(jumlah) || jumlah <= 0) jumlah = 1;
-        let satuan = document.getElementById('inputSatuanMasuk').value;
-        if(!satuan) { alert("Pilih Satuan"); return; }
-        let supplier = document.getElementById('inputSupplierMasuk').value.trim();
-        if(!supplier) supplier = "Umum";
-        // Simpan master
-        masterBrands.add(brand); masterNamaBarang.add(namaBarang); masterSatuan.add(satuan); masterSupplier.add(supplier);
-        syncMasterToStorage();
-        const newId = dataMasuk.length ? Math.max(...dataMasuk.map(m=>m.id)) + 1 : 1;
-        dataMasuk.push({ id: newId, tanggal, brand, namaBarang, supplier, jumlah, satuan });
-        refreshAll();
-        alert("Barang masuk ditambahkan");
-        document.getElementById('inputJumlahMasuk').value = 1;
-        document.getElementById('inputSupplierMasuk').value = "";
-    }
-
-    function addBarangKeluar() {
-        const tanggalKeluar = document.getElementById('inputTanggalKeluar').value;
-        if(!tanggalKeluar) { alert("Isi tanggal keluar"); return; }
-        const brand = document.getElementById('inputBrandKeluar').value;
-        if(!brand) { alert("Pilih Brand"); return; }
-        const barangKeluar = document.getElementById('inputNamaBarangKeluar').value;
-        if(!barangKeluar) { alert("Pilih Nama Barang"); return; }
-        let jumlahKeluar = parseInt(document.getElementById('inputJumlahKeluar').value);
-        if(isNaN(jumlahKeluar) || jumlahKeluar <= 0) jumlahKeluar = 1;
-        const satuan = document.getElementById('inputSatuanKeluar').value;
-        if(!satuan) { alert("Pilih Satuan"); return; }
-        let pic = document.getElementById('inputPicKeluar').value.trim();
-        if(!pic) pic = "Admin";
-        const stokTersedia = getTotalMasuk(brand, barangKeluar) - getTotalKeluar(brand, barangKeluar);
-        if(stokTersedia < jumlahKeluar && !confirm(`Stok saat ini hanya ${stokTersedia} ${satuan}. Tetap catat pengeluaran?`)) return;
-        const newId = dataKeluar.length ? Math.max(...dataKeluar.map(k=>k.id)) + 1 : 201;
-        dataKeluar.push({ id: newId, tanggalKeluar, brand, barangKeluar, jumlahKeluar, satuan, namaPic: pic });
-        refreshAll();
-        alert("Barang keluar dicatat");
-        document.getElementById('inputJumlahKeluar').value = 1;
-        document.getElementById('inputPicKeluar').value = "";
     }
 
     // Render Tabel
     function renderTabelMasuk() {
         const tbody = document.getElementById('tbodyMasuk');
-        if(!dataMasuk.length) { tbody.innerHTML = '<tr><td colspan="7">Tidak ada数据</td></tr>'; return; }
-        tbody.innerHTML = dataMasuk.map(m => `<tr><td>${escapeHtml(m.tanggal)}</td><td><strong>${escapeHtml(m.brand)}</strong></td><td>${escapeHtml(m.namaBarang)}</td><td>${escapeHtml(m.supplier)}</td><td>${m.jumlah}</td><td>${escapeHtml(m.satuan)}</td><td class="action-icons"><i class="fas fa-edit" onclick="editMasuk(${m.id})"></i><i class="fas fa-trash-alt" onclick="hapusMasuk(${m.id})"></i></td></tr>`).join('');
-    }
-    function renderTabelKeluar() {
-        const tbody = document.getElementById('tbodyKeluar');
-        if(!dataKeluar.length) { tbody.innerHTML = '<tr><td colspan="8">Tidak ada数据</td></tr>'; return; }
-        tbody.innerHTML = dataKeluar.map(k => { const stokMasuk = getTotalMasuk(k.brand, k.barangKeluar);
-            return `<tr><td>${stokMasuk}</td><td>${escapeHtml(k.tanggalKeluar)}</td><td><strong>${escapeHtml(k.brand)}</strong></td><td>${escapeHtml(k.barangKeluar)}</td><td>${k.jumlahKeluar}</td><td>${escapeHtml(k.satuan)}</td><td>${escapeHtml(k.namaPic)}</td><td class="action-icons"><i class="fas fa-edit" onclick="editKeluar(${k.id})"></i><i class="fas fa-trash-alt" onclick="hapusKeluar(${k.id})"></i></td></tr>`;
-        }).join('');
+        if(!dataMasuk.length) { tbody.innerHTML = '<tr><td colspan="7">Belum ada data</td></tr>'; return; }
+        tbody.innerHTML = dataMasuk.map(m => `
+            <tr>
+                <td>${escapeHtml(m.tanggal)}</td>
+                <td><strong>${escapeHtml(m.brand)}</strong></td>
+                <td>${escapeHtml(m.namaBarang)}</td>
+                <td>${escapeHtml(m.supplier)}</td>
+                <td>${m.jumlah}</td>
+                <td>${escapeHtml(m.satuan)}</td>
+                <td class="action-icons">
+                    <i class="fas fa-edit" onclick="editMasuk(${m.id})"></i>
+                    <i class="fas fa-trash-alt" onclick="hapusMasuk(${m.id})"></i>
+                </td>
+            </tr>
+        `).join('');
     }
 
-    // REKAP dengan Tampilan Kartu yang Disesuaikan
-    function buildRekapStok() {
-        const searchTerm = document.getElementById('rekapSearchInput').value.toLowerCase();
+    function renderTabelKeluar() {
+        const tbody = document.getElementById('tbodyKeluar');
+        if(!dataKeluar.length) { tbody.innerHTML = '<tr><td colspan="7">Belum ada data</td></tr>'; return; }
+        tbody.innerHTML = dataKeluar.map(k => `
+            <tr>
+                <td>${escapeHtml(k.tanggal)}</td>
+                <td><strong>${escapeHtml(k.brand)}</strong></td>
+                <td>${escapeHtml(k.namaBarang)}</td>
+                <td>${k.jumlah}</td>
+                <td>${escapeHtml(k.satuan)}</td>
+                <td>${escapeHtml(k.pic)}</td>
+                <td class="action-icons">
+                    <i class="fas fa-edit" onclick="editKeluar(${k.id})"></i>
+                    <i class="fas fa-trash-alt" onclick="hapusKeluar(${k.id})"></i>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Rekap Stok
+    function renderRekapStok() {
+        const searchTerm = document.getElementById('searchRekap')?.value.toLowerCase() || '';
         let items = getAllItems();
         if(searchTerm) items = items.filter(i => i.brand.toLowerCase().includes(searchTerm) || i.namaBarang.toLowerCase().includes(searchTerm));
-        if(items.length === 0) { document.getElementById('rekapContainer').innerHTML = '<p class="small-note">Tidak ada data sesuai pencarian</p>'; return; }
+        const container = document.getElementById('rekapStokList');
+        if(!items.length) { container.innerHTML = '<p class="badge">Tidak ada data</p>'; return; }
         let html = '';
-        for(let item of items) {
+        items.forEach(item => {
             const totalMasuk = getTotalMasuk(item.brand, item.namaBarang);
             const totalKeluar = getTotalKeluar(item.brand, item.namaBarang);
             const stokAkhir = totalMasuk - totalKeluar;
-            const riwayat = dataKeluar.filter(k => k.brand === item.brand && k.barangKeluar === item.namaBarang);
-            let rincianHtml = riwayat.length ? riwayat.map(k => `<span class="badge">${k.tanggalKeluar}: ${k.jumlahKeluar} ${k.satuan} (${k.namaPic})</span>`).join(' ') : '<span class="badge">Tidak ada pengambilan</span>';
+            const riwayatKeluar = dataKeluar.filter(k => k.brand === item.brand && k.namaBarang === item.namaBarang);
             html += `
-                <div class="rekap-card-item">
-                    <div class="rekap-brand"><i class="fas fa-tag"></i> ${escapeHtml(item.brand)} - ${escapeHtml(item.namaBarang)}</div>
-                    <div><span class="badge">📦 Total Masuk: ${totalMasuk} ${escapeHtml(item.namaBarang.split(' ')[0])}</span> 
-                          <span class="badge">📤 Total Keluar: ${totalKeluar}</span>
-                          <span class="rekap-stok">✅ Stok Akhir: ${stokAkhir}</span>
+                <div class="rekap-card">
+                    <div class="rekap-brand"><i class="fas fa-box"></i> ${escapeHtml(item.brand)} - ${escapeHtml(item.namaBarang)}</div>
+                    <div class="rekap-stats">
+                        <span class="badge">📦 Masuk: ${totalMasuk}</span>
+                        <span class="badge">📤 Keluar: ${totalKeluar}</span>
+                        <span class="rekap-stok-akhir">✅ Stok Akhir: ${stokAkhir}</span>
                     </div>
-                    <div class="rekap-detail"><i class="fas fa-history"></i> Rincian Pengambilan:<br/> ${rincianHtml}</div>
+                    <div class="rekap-detail">
+                        <i class="fas fa-history"></i> Riwayat Keluar: ${riwayatKeluar.length ? riwayatKeluar.map(k => `${k.tanggal}: ${k.jumlah} ${k.satuan} (${k.pic})`).join('; ') : 'Tidak ada'}
+                    </div>
                 </div>
             `;
-        }
-        document.getElementById('rekapContainer').innerHTML = html;
+        });
+        container.innerHTML = html;
     }
+
+    // Ringkasan Dashboard
+    function renderRingkasan() {
+        const items = getAllItems();
+        let totalStok = 0;
+        let totalTransaksiMasuk = dataMasuk.length;
+        let totalTransaksiKeluar = dataKeluar.length;
+        items.forEach(item => {
+            totalStok += (getTotalMasuk(item.brand, item.namaBarang) - getTotalKeluar(item.brand, item.namaBarang));
+        });
+        document.getElementById('ringkasanDashboard').innerHTML = `
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;">
+                <div class="rekap-card"><i class="fas fa-database"></i> Total Item: ${items.length}</div>
+                <div class="rekap-card"><i class="fas fa-arrow-down"></i> Transaksi Masuk: ${totalTransaksiMasuk}</div>
+                <div class="rekap-card"><i class="fas fa-arrow-up"></i> Transaksi Keluar: ${totalTransaksiKeluar}</div>
+                <div class="rekap-card"><i class="fas fa-chart-line"></i> Total Stok: ${totalStok}</div>
+            </div>
+        `;
+    }
+
+    // CRUD
+    function addBarangMasuk() {
+        let tanggal = document.getElementById('tglMasuk').value;
+        let brand = document.getElementById('brandMasuk').value.trim();
+        let namaBarang = document.getElementById('namaMasuk').value.trim();
+        let supplier = document.getElementById('supplierMasuk').value.trim();
+        let jumlah = parseInt(document.getElementById('jumlahMasuk').value);
+        let satuan = document.getElementById('satuanMasuk').value.trim();
+
+        if(!tanggal || !brand || !namaBarang || !supplier || !jumlah || !satuan) {
+            alert('Semua field harus diisi!');
+            return;
+        }
+
+        const newId = dataMasuk.length ? Math.max(...dataMasuk.map(m=>m.id)) + 1 : 1;
+        dataMasuk.push({ id: newId, tanggal, brand, namaBarang, supplier, jumlah, satuan });
+        saveData();
+        renderTabelMasuk();
+        renderRekapStok();
+        renderRingkasan();
+        alert('Barang masuk ditambahkan');
+        document.getElementById('formBarangMasuk').classList.remove('show');
+    }
+
+    function addBarangKeluar() {
+        let tanggal = document.getElementById('tglKeluar').value;
+        let brand = document.getElementById('brandKeluar').value.trim();
+        let namaBarang = document.getElementById('namaKeluar').value.trim();
+        let jumlah = parseInt(document.getElementById('jumlahKeluar').value);
+        let satuan = document.getElementById('satuanKeluar').value.trim();
+        let pic = document.getElementById('picKeluar').value.trim();
+
+        if(!tanggal || !brand || !namaBarang || !jumlah || !satuan || !pic) {
+            alert('Semua field harus diisi!');
+            return;
+        }
+
+        const stokTersedia = getTotalMasuk(brand, namaBarang) - getTotalKeluar(brand, namaBarang);
+        if(stokTersedia < jumlah && !confirm(`Stok tersisa ${stokTersedia} ${satuan}. Tetap catat?`)) return;
+
+        const newId = dataKeluar.length ? Math.max(...dataKeluar.map(k=>k.id)) + 1 : 1;
+        dataKeluar.push({ id: newId, tanggal, brand, namaBarang, jumlah, satuan, pic });
+        saveData();
+        renderTabelKeluar();
+        renderRekapStok();
+        renderRingkasan();
+        alert('Barang keluar dicatat');
+        document.getElementById('formBarangKeluar').classList.remove('show');
+    }
+
+    function editMasuk(id) { let item = dataMasuk.find(m=>m.id===id); if(item){ let t=prompt("Tanggal",item.tanggal); if(t) item.tanggal=t; let b=prompt("Brand",item.brand); if(b) item.brand=b; let n=prompt("Nama",item.namaBarang); if(n) item.namaBarang=n; let s=prompt("Supplier",item.supplier); if(s) item.supplier=s; let j=parseInt(prompt("Jumlah",item.jumlah)); if(!isNaN(j)) item.jumlah=j; let sat=prompt("Satuan",item.satuan); if(sat) item.satuan=sat; saveData(); renderTabelMasuk(); renderRekapStok(); renderRingkasan(); } }
+    function hapusMasuk(id) { if(confirm("Hapus?")) { dataMasuk = dataMasuk.filter(m=>m.id!==id); saveData(); renderTabelMasuk(); renderRekapStok(); renderRingkasan(); } }
+    function editKeluar(id) { let item = dataKeluar.find(k=>k.id===id); if(item){ let t=prompt("Tanggal",item.tanggal); if(t) item.tanggal=t; let b=prompt("Brand",item.brand); if(b) item.brand=b; let n=prompt("Nama",item.namaBarang); if(n) item.namaBarang=n; let j=parseInt(prompt("Jumlah",item.jumlah)); if(!isNaN(j)) item.jumlah=j; let sat=prompt("Satuan",item.satuan); if(sat) item.satuan=sat; let p=prompt("PIC",item.pic); if(p) item.pic=p; saveData(); renderTabelKeluar(); renderRekapStok(); renderRingkasan(); } }
+    function hapusKeluar(id) { if(confirm("Hapus?")) { dataKeluar = dataKeluar.filter(k=>k.id!==id); saveData(); renderTabelKeluar(); renderRekapStok(); renderRingkasan(); } }
 
     function exportToExcel() {
         const items = getAllItems();
@@ -397,8 +683,7 @@
             Brand: item.brand, "Nama Barang": item.namaBarang,
             "Total Masuk": getTotalMasuk(item.brand, item.namaBarang),
             "Total Keluar": getTotalKeluar(item.brand, item.namaBarang),
-            "Stok Akhir": getTotalMasuk(item.brand, item.namaBarang) - getTotalKeluar(item.brand, item.namaBarang),
-            "Rincian Pengambilan": dataKeluar.filter(k => k.brand === item.brand && k.barangKeluar === item.namaBarang).map(k => `${k.tanggalKeluar}:${k.jumlahKeluar} ${k.satuan} (${k.namaPic})`).join("; ")
+            "Stok Akhir": getTotalMasuk(item.brand, item.namaBarang) - getTotalKeluar(item.brand, item.namaBarang)
         }));
         if(!data.length) { alert("Tidak ada data"); return; }
         const ws = XLSX.utils.json_to_sheet(data);
@@ -406,44 +691,50 @@
         XLSX.utils.book_append_sheet(wb, ws, "Rekap_Stok");
         XLSX.writeFile(wb, `Rekap_Stok_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
-    function printRekap() { window.print(); }
+    function printLaporan() { window.print(); }
 
-    // Edit & Hapus
-    function editMasuk(id) { let item = dataMasuk.find(m=>m.id===id); if(item){ let t=prompt("Tgl",item.tanggal); if(t) item.tanggal=t; let b=prompt("Brand",item.brand); if(b) { item.brand=b; masterBrands.add(b); } let n=prompt("Nama",item.namaBarang); if(n) { item.namaBarang=n; masterNamaBarang.add(n); } let sp=prompt("Supplier",item.supplier); if(sp) { item.supplier=sp; masterSupplier.add(sp); } let j=parseInt(prompt("Jumlah",item.jumlah)); if(!isNaN(j)) item.jumlah=j; let sat=prompt("Satuan",item.satuan); if(sat) { item.satuan=sat; masterSatuan.add(sat); } syncMasterToStorage(); refreshAll(); } }
-    function hapusMasuk(id) { if(confirm("Hapus data masuk?")) { dataMasuk = dataMasuk.filter(m=>m.id!==id); refreshAll(); } }
-    function editKeluar(id) { let item = dataKeluar.find(k=>k.id===id); if(item){ let t=prompt("Tgl Keluar",item.tanggalKeluar); if(t) item.tanggalKeluar=t; let b=prompt("Brand",item.brand); if(b) item.brand=b; let brg=prompt("Barang",item.barangKeluar); if(brg) item.barangKeluar=brg; let j=parseInt(prompt("Jumlah",item.jumlahKeluar)); if(!isNaN(j)) item.jumlahKeluar=j; let sat=prompt("Satuan",item.satuan); if(sat) item.satuan=sat; let pic=prompt("PIC",item.namaPic); if(pic) item.namaPic=pic; refreshAll(); } }
-    function hapusKeluar(id) { if(confirm("Hapus data keluar?")) { dataKeluar = dataKeluar.filter(k=>k.id!==id); refreshAll(); } }
-
-    function refreshAll() {
-        renderTabelMasuk();
-        renderTabelKeluar();
-        loadMasterData();
-        integrateMasterToDropdowns();
-        buildRekapStok();
-        saveToStorage();
-    }
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
 
-    const today = new Date().toISOString().slice(0,10);
+    // Menu Navigation
+    function showMenu(menuId, title) {
+        document.querySelectorAll('.menu-page').forEach(page => page.style.display = 'none');
+        document.getElementById(`menu-${menuId}`).style.display = 'block';
+        document.getElementById('mainPageTitle').innerHTML = title;
+        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+        document.querySelector(`.menu-item[data-menu="${menuId}"]`).classList.add('active');
+        if(window.innerWidth <= 768) closeSidebar();
+    }
+
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+
+    // Init
     window.onload = () => {
-        loadFromStorage();
-        loadMasterData();
-        refreshAll();
-        document.getElementById('inputTanggalMasuk').value = today;
-        document.getElementById('inputTanggalKeluar').value = today;
-        document.getElementById('btnSubmitMasuk').onclick = addBarangMasuk;
-        document.getElementById('btnSubmitKeluar').onclick = addBarangKeluar;
+        loadData();
+        renderTabelMasuk();
+        renderTabelKeluar();
+        renderRekapStok();
+        renderRingkasan();
+
+        document.getElementById('tglMasuk').value = new Date().toISOString().slice(0,10);
+        document.getElementById('tglKeluar').value = new Date().toISOString().slice(0,10);
+
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => showMenu(item.dataset.menu, item.querySelector('.menu-text').innerHTML));
+        });
+        document.getElementById('toggleFormMasukBtn').onclick = () => document.getElementById('formBarangMasuk').classList.toggle('show');
+        document.getElementById('toggleFormKeluarBtn').onclick = () => document.getElementById('formBarangKeluar').classList.toggle('show');
+        document.getElementById('simpanMasukBtn').onclick = addBarangMasuk;
+        document.getElementById('simpanKeluarBtn').onclick = addBarangKeluar;
         document.getElementById('exportExcelBtn').onclick = exportToExcel;
-        document.getElementById('printRekapBtn').onclick = printRekap;
-        document.getElementById('tambahBrandBtn').onclick = tambahBrandBaru;
-        document.getElementById('tambahNamaBarangBtn').onclick = tambahNamaBarangBaru;
-        document.getElementById('tambahSatuanBtn').onclick = tambahSatuanBaru;
-        document.getElementById('tambahSupplierBtn').onclick = tambahSupplierBaru;
-        const searchInput = document.getElementById('rekapSearchInput');
-        searchInput.addEventListener('input', () => buildRekapStok());
-        document.getElementById('clearRekapSearch').onclick = () => { searchInput.value = ''; buildRekapStok(); };
+        document.getElementById('printLaporanBtn').onclick = printLaporan;
+        document.getElementById('hamburgerBtn').onclick = toggleSidebar;
+        document.getElementById('overlay').onclick = closeSidebar;
+        document.getElementById('searchRekap').addEventListener('input', renderRekapStok);
+        document.getElementById('clearSearch').onclick = () => { document.getElementById('searchRekap').value = ''; renderRekapStok(); };
     };
-    window.editMasuk = editMasuk; window.hapusMasuk = hapusMasuk; window.editKeluar = editKeluar; window.hapusKeluar = hapusKeluar;
+    window.editMasuk = editMasuk; window.hapusMasuk = hapusMasuk;
+    window.editKeluar = editKeluar; window.hapusKeluar = hapusKeluar;
 </script>
 </body>
 </html>
